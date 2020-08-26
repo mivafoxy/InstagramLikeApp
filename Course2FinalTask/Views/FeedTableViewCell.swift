@@ -11,24 +11,14 @@ import DataProvider
 
 class FeedTableViewCell: UITableViewCell {
     
-    struct Consts {
-        
-        static let littleImageSize: CGFloat = 35.0
-        static let smallImageSize: CGFloat = 44.0
-        
-        static let middleFontSize: CGFloat = 14.0
-        
-        static let littleOffset: CGFloat = 1.0
-        static let smallOffset: CGFloat = 8.0
-        static let middleOffset: CGFloat = 15.0
-    }
+    
     
     // MARK: - Cell model
-    var post: Post?
+    fileprivate var post: Post?
     
     // MARK: - View elements
     
-    lazy var postImageView: UIImageView = {
+    fileprivate lazy var postImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
@@ -37,36 +27,36 @@ class FeedTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    lazy var authorProfileView: UIImageView = {
+    fileprivate lazy var authorProfileView: UIImageView = {
         let imageView = UIImageView(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
         return imageView
     }()
     
-    lazy var usernameLabel: UILabel = {
+    fileprivate lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: Consts.middleFontSize, weight: .semibold)
+        label.font = .systemFont(ofSize: SharedConsts.UIConsts.middleFontSize, weight: .semibold)
         return label
     }()
     
-    lazy var postDateLabel: UILabel = {
+    fileprivate lazy var postDateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: Consts.middleFontSize)
+        label.font = .systemFont(ofSize: SharedConsts.UIConsts.middleFontSize)
         return label
     }()
     
-    lazy var likesLabel: UILabel = {
+    fileprivate lazy var likesLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: Consts.middleFontSize, weight: .semibold)
+        label.font = .systemFont(ofSize: SharedConsts.UIConsts.middleFontSize, weight: .semibold)
         label.clipsToBounds = true
         return label
     }()
     
-    lazy var likeImageView: UIImageView = {
+    fileprivate lazy var likeImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
@@ -75,16 +65,16 @@ class FeedTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    lazy var descriptionLabel: UILabel = {
+    fileprivate lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: Consts.middleFontSize)
+        label.font = .systemFont(ofSize: SharedConsts.UIConsts.middleFontSize)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         return label
     }()
     
-    lazy var bigLikeView: UIImageView = {
+    fileprivate lazy var bigLikeView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: SharedConsts.Assets.bigLike.rawValue)
@@ -236,46 +226,46 @@ class FeedTableViewCell: UITableViewCell {
         
         self.addSubview(authorProfileView)
         
-        authorProfileView.topAnchor.constraint(equalTo: self.topAnchor, constant: Consts.smallOffset).isActive = true
-        authorProfileView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Consts.middleOffset).isActive = true
-        authorProfileView.widthAnchor.constraint(equalToConstant: Consts.littleImageSize).isActive = true
-        authorProfileView.heightAnchor.constraint(equalToConstant: Consts.littleImageSize).isActive = true
+        authorProfileView.topAnchor.constraint(equalTo: self.topAnchor, constant: SharedConsts.UIConsts.smallOffset).isActive = true
+        authorProfileView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: SharedConsts.UIConsts.middleOffset).isActive = true
+        authorProfileView.widthAnchor.constraint(equalToConstant: SharedConsts.UIConsts.littleImageSize).isActive = true
+        authorProfileView.heightAnchor.constraint(equalToConstant: SharedConsts.UIConsts.littleImageSize).isActive = true
         
         self.addSubview(descriptionLabel)
         
-        descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: Consts.littleOffset).isActive = true
-        descriptionLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -1*Consts.middleOffset).isActive = true
-        descriptionLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Consts.middleOffset).isActive = true
+        descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: SharedConsts.UIConsts.littleOffset).isActive = true
+        descriptionLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -1*SharedConsts.UIConsts.middleOffset).isActive = true
+        descriptionLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: SharedConsts.UIConsts.middleOffset).isActive = true
         
         self.addSubview(likeImageView)
         
-        likeImageView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -1*Consts.middleOffset).isActive = true
-        likeImageView.widthAnchor.constraint(equalToConstant: Consts.smallImageSize).isActive = true
-        likeImageView.heightAnchor.constraint(equalToConstant: Consts.smallImageSize).isActive = true
-        likeImageView.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: Consts.littleOffset).isActive = true
+        likeImageView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -1*SharedConsts.UIConsts.middleOffset).isActive = true
+        likeImageView.widthAnchor.constraint(equalToConstant: SharedConsts.UIConsts.smallImageSize).isActive = true
+        likeImageView.heightAnchor.constraint(equalToConstant: SharedConsts.UIConsts.smallImageSize).isActive = true
+        likeImageView.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: SharedConsts.UIConsts.littleOffset).isActive = true
         likeImageView.image = UIImage(named: "like")
         
         self.addSubview(likesLabel)
         
         likesLabel.centerYAnchor.constraint(equalTo: likeImageView.centerYAnchor).isActive = true
-        likesLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: Consts.middleOffset).isActive = true
+        likesLabel.leftAnchor.constraint(equalTo: self.leftAnchor, constant: SharedConsts.UIConsts.middleOffset).isActive = true
         
         self.addSubview(postImageView)
         
         postImageView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         postImageView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        postImageView.topAnchor.constraint(equalTo: authorProfileView.bottomAnchor, constant: Consts.smallOffset).isActive = true
+        postImageView.topAnchor.constraint(equalTo: authorProfileView.bottomAnchor, constant: SharedConsts.UIConsts.smallOffset).isActive = true
         postImageView.bottomAnchor.constraint(equalTo: likeImageView.topAnchor).isActive = true
         
         self.addSubview(usernameLabel)
         
-        usernameLabel.leftAnchor.constraint(equalTo: authorProfileView.rightAnchor, constant: Consts.smallOffset).isActive = true
-        usernameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: Consts.smallOffset).isActive = true
+        usernameLabel.leftAnchor.constraint(equalTo: authorProfileView.rightAnchor, constant: SharedConsts.UIConsts.smallOffset).isActive = true
+        usernameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: SharedConsts.UIConsts.smallOffset).isActive = true
         
         self.addSubview(postDateLabel)
         
-        postDateLabel.leftAnchor.constraint(equalTo: authorProfileView.rightAnchor, constant: Consts.smallOffset).isActive = true
-        postDateLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: Consts.littleOffset).isActive = true
+        postDateLabel.leftAnchor.constraint(equalTo: authorProfileView.rightAnchor, constant: SharedConsts.UIConsts.smallOffset).isActive = true
+        postDateLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: SharedConsts.UIConsts.littleOffset).isActive = true
         
         
     }

@@ -4,14 +4,13 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Tab Controller-->
         <scene sceneID="eFS-3M-GiO">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="H8C-Z0-ief" customClass="TabController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="H8C-Z0-ief" customClass="TabController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" itemPositioning="fill" id="9Q9-2Z-awS">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
@@ -21,7 +20,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="J7S-Cj-ber" kind="relationship" relationship="viewControllers" id="x6Y-GA-RQr"/>
-                        <segue destination="MjP-OY-U3c" kind="relationship" relationship="viewControllers" id="WnF-LY-oeK"/>
+                        <segue destination="4Ob-v7-4kJ" kind="relationship" relationship="viewControllers" id="VQd-ih-sS8"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l7R-2J-3Ex" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -57,22 +56,6 @@
             </objects>
             <point key="canvasLocation" x="2381" y="-557"/>
         </scene>
-        <!--Profile-->
-        <scene sceneID="EfH-9n-7xf">
-            <objects>
-                <viewController id="MjP-OY-U3c" customClass="ProfileViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="ld9-PL-eeN">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="qG7-WC-GMb"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Profile" image="profile" landscapeImage="profile" largeContentSizeImage="profile" selectedImage="profile" id="buF-oE-uwd"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Y00-As-OSk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1363" y="155"/>
-        </scene>
         <!--Feed-->
         <scene sceneID="ARR-5a-q2A">
             <objects>
@@ -91,6 +74,54 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MKU-6w-IUE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1361" y="-557"/>
+        </scene>
+        <!--Profile View Controller-->
+        <scene sceneID="1Cz-xX-WGf">
+            <objects>
+                <tableViewController id="gnf-62-uFW" customClass="ProfileViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="wDN-g4-Nc4">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ProfileCell" id="ZAX-rk-JZK" customClass="ProfileTableViewCell" customModule="Course2FinalTask" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZAX-rk-JZK" id="34B-hj-ee7">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="gnf-62-uFW" id="vpG-kB-hg2"/>
+                            <outlet property="delegate" destination="gnf-62-uFW" id="YBr-Ng-hw4"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="oWm-TR-fWw"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CKA-da-8aI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2441.25" y="135.21126760563379"/>
+        </scene>
+        <!--Profile-->
+        <scene sceneID="1R7-Yr-KRU">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4Ob-v7-4kJ" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Profile" image="profile" landscapeImage="profile" largeContentSizeImage="profile" selectedImage="profile" id="96P-z4-uSu"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="c7S-ol-l6s">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="gnf-62-uFW" kind="relationship" relationship="rootViewController" id="Ep3-t4-ELl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GHX-6O-gK5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1443.75" y="135.21126760563379"/>
         </scene>
     </scenes>
     <resources>
