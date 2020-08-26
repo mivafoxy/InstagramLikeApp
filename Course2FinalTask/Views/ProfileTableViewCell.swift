@@ -47,12 +47,13 @@ class ProfileTableViewCell: UITableViewCell {
     }()
     
     fileprivate lazy var photoCollectionView: UICollectionView = {
-        let photoLayout = UICollectionViewFlowLayout()
-        photoLayout.scrollDirection = .vertical
-        let collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), collectionViewLayout: photoLayout)
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.isPagingEnabled = true
+        let frame = CGRect(x: 0.0, y: 0.0, width: self.frame.width, height: self.frame.height)
+        let collectionView = UICollectionView(frame: frame, collectionViewLayout: collectionViewLayout())
         collectionView.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: photoCellId)
+        collectionView.backgroundColor = .white
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         return collectionView
     }()
     
@@ -102,17 +103,23 @@ class ProfileTableViewCell: UITableViewCell {
         
         self.addSubview(photoCollectionView)
         
-        
-        photoCollectionView.frame = self.bounds
         photoCollectionView.delegate = self
         photoCollectionView.dataSource = self
+        
+        photoCollectionView.topAnchor.constraint(equalTo: profileIconView.bottomAnchor, constant: SharedConsts.UIConsts.smallOffset).isActive = true
+        photoCollectionView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+        photoCollectionView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         
     }
 }
 
 extension ProfileTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.userPosts?.count ?? 0
+        if let posts = userPosts {
+            return posts.count
+        } else {
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -124,6 +131,20 @@ extension ProfileTableViewCell: UICollectionViewDataSource, UICollectionViewDele
         
         return cell
     }
-    
-    
+}
+
+extension ProfileTableViewCell {
+    func collectionViewLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        let cellWidhtHeaghtConstant: CGFloat = UIScreen.main.bounds.width * 0.2
+        
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.itemSize = CGSize(width: cellWidhtHeaghtConstant, height: cellWidhtHeaghtConstant)
+        
+        return layout
+    }
 }

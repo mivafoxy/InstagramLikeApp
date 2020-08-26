@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -20,7 +21,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="J7S-Cj-ber" kind="relationship" relationship="viewControllers" id="x6Y-GA-RQr"/>
-                        <segue destination="4Ob-v7-4kJ" kind="relationship" relationship="viewControllers" id="VQd-ih-sS8"/>
+                        <segue destination="Z1k-2s-6BE" kind="relationship" relationship="viewControllers" id="DgP-vu-fEi"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l7R-2J-3Ex" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -76,52 +77,58 @@
             <point key="canvasLocation" x="1361" y="-557"/>
         </scene>
         <!--Profile View Controller-->
-        <scene sceneID="1Cz-xX-WGf">
+        <scene sceneID="z4L-IW-meD">
             <objects>
-                <tableViewController id="gnf-62-uFW" customClass="ProfileViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="wDN-g4-Nc4">
+                <collectionViewController id="ea9-uO-GVt" customClass="ProfileViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="mge-Cm-XQ8">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ProfileCell" id="ZAX-rk-JZK" customClass="ProfileTableViewCell" customModule="Course2FinalTask" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZAX-rk-JZK" id="34B-hj-ee7">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="4D7-6U-x4l">
+                            <size key="itemSize" width="128" height="128"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="eas-8H-u8Q" customClass="PhotoCollectionViewCell" customModule="Course2FinalTask" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="7Fa-iX-ybw">
+                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
+                                </collectionViewCellContentView>
+                            </collectionViewCell>
+                        </cells>
                         <connections>
-                            <outlet property="dataSource" destination="gnf-62-uFW" id="vpG-kB-hg2"/>
-                            <outlet property="delegate" destination="gnf-62-uFW" id="YBr-Ng-hw4"/>
+                            <outlet property="dataSource" destination="ea9-uO-GVt" id="85j-pM-ifr"/>
+                            <outlet property="delegate" destination="ea9-uO-GVt" id="EZ5-jk-jGy"/>
                         </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="oWm-TR-fWw"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="CKA-da-8aI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="jck-Cf-ZCT"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1pp-gv-8l3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2441.25" y="135.21126760563379"/>
+            <point key="canvasLocation" x="2356.875" y="222.88732394366198"/>
         </scene>
         <!--Profile-->
-        <scene sceneID="1R7-Yr-KRU">
+        <scene sceneID="med-cc-h2O">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4Ob-v7-4kJ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" image="profile" landscapeImage="profile" largeContentSizeImage="profile" selectedImage="profile" id="96P-z4-uSu"/>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Z1k-2s-6BE" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Profile" image="profile" landscapeImage="profile" largeContentSizeImage="profile" selectedImage="profile" id="wZr-ar-7Mt"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="c7S-ol-l6s">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="rYo-go-daR">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="gnf-62-uFW" kind="relationship" relationship="rootViewController" id="Ep3-t4-ELl"/>
+                        <segue destination="ea9-uO-GVt" kind="relationship" relationship="rootViewController" id="Fk3-db-cTj"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="GHX-6O-gK5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PZ3-OT-lIG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1443.75" y="135.21126760563379"/>
+            <point key="canvasLocation" x="1357.5" y="222.88732394366198"/>
         </scene>
     </scenes>
     <resources>

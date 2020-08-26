@@ -18,6 +18,7 @@
 		B383A5D324EAF0F800236928 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B383A5D224EAF0F800236928 /* Main.storyboard */; };
 		B383A5D524EAF11300236928 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B383A5D424EAF11300236928 /* FeedViewController.swift */; };
 		B3D4893124EB35B000114B86 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D4892F24EB358200114B86 /* Assets.xcassets */; };
+		B3E1AF0824F6E158007A5946 /* ProfileHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E1AF0724F6E158007A5946 /* ProfileHeaderCollectionReusableView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +48,7 @@
 		B383A5D224EAF0F800236928 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		B383A5D424EAF11300236928 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		B3D4892F24EB358200114B86 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B3E1AF0724F6E158007A5946 /* ProfileHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 				B36E7BDB24EC57EB00DDFAFE /* FeedTableViewCell.swift */,
 				B32A8D5324F682E1000ACD72 /* ProfileTableViewCell.swift */,
 				B31E669424F6ACBD00F9EC86 /* PhotoCollectionViewCell.swift */,
+				B3E1AF0724F6E158007A5946 /* ProfileHeaderCollectionReusableView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -224,6 +227,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3E1AF0824F6E158007A5946 /* ProfileHeaderCollectionReusableView.swift in Sources */,
 				B31E669324F6A29E00F9EC86 /* ProfileViewController.swift in Sources */,
 				B33F556024F64F960002D568 /* SharedConsts.swift in Sources */,
 				74B79258202B3254006BCB41 /* AppDelegate.swift in Sources */,

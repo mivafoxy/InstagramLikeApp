@@ -9,27 +9,57 @@
 import UIKit
 import DataProvider
 
-class ProfileViewController: UITableViewController {
+class ProfileViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
     fileprivate let reuseId = "ProfileCell"
+    fileprivate let headerId = "ProfileHeader"
 
-
+    fileprivate var posts: [Post]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.register(ProfileTableViewCell.self, forCellReuseIdentifier: reuseId)
-        self.title = "Profile"
+        self.collectionView.register(
+            PhotoCollectionViewCell.self,
+            forCellWithReuseIdentifier: reuseId)
+        
+        self.collectionView.register(
+            ProfileHeaderCollectionReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: headerId)
+        
+        let currentUser = DataProviders.shared.usersDataProvider.currentUser()
+        posts = DataProviders.shared.postsDataProvider.findPosts(by: currentUser.id)
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1 // always 1 cause one profile in view
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let userPosts = posts else { return 0 }
+        return userPosts.count
     }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: reuseId) as! ProfileTableViewCell
-
-        cell.configureCell(DataProviders.shared.usersDataProvider.currentUser())
-
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: reuseId, for: indexPath)
+        cell.backgroundColor = .black
         return cell
+    }
+    
+    override func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        let header =
+            collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: headerId,
+                for: indexPath) as! ProfileHeaderCollectionReusableView
+        
+        header.configureView(DataProviders.shared.usersDataProvider.currentUser())
+        
+        return header
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return .init(width: view.frame.width, height: 86)
     }
 }
