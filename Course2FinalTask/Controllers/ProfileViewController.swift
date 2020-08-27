@@ -14,7 +14,23 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
     fileprivate let reuseId = "ProfileCell"
     fileprivate let headerId = "ProfileHeader"
 
-    fileprivate var posts: [Post]?
+    fileprivate var userModel: UserModel?
+    
+    // MARK: - public
+    
+    public func setUserModel(with user: User) {
+        self.userModel = UserModel(user)
+    }
+    
+    public func setUserModel(with post: Post) {
+        self.userModel = UserModel(post)
+    }
+    
+    public func setUserModel(with model: UserModel) {
+        self.userModel = model
+    }
+    
+    // MARK: - base
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,19 +44,24 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: headerId)
         
-        let currentUser = DataProviders.shared.usersDataProvider.currentUser()
-        posts = DataProviders.shared.postsDataProvider.findPosts(by: currentUser.id)
+        if let _ = userModel {
+            
+        } else {
+            userModel = UserModel(DataProviders.shared.usersDataProvider.currentUser())
+        }
+        
+        self.navigationItem.title = userModel?.username
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let userPosts = posts else { return 0 }
+        guard let userPosts = userModel?.userPosts else { return 0 }
         return userPosts.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: reuseId, for: indexPath) as! PhotoCollectionViewCell
         
-        if let userPosts = posts {
+        if let userPosts = userModel?.userPosts {
             cell.configureCell(userPosts[indexPath.row])
         }
         
@@ -58,8 +79,11 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
                 withReuseIdentifier: headerId,
                 for: indexPath) as! ProfileHeaderCollectionReusableView
         
-        header.configureView(DataProviders.shared.usersDataProvider.currentUser())
-        
+        if let user = self.userModel {
+            header.configureView(user)
+            header.navigationDelegate = self
+        }
+
         return header
     }
     
@@ -82,4 +106,22 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+}
+
+extension ProfileViewController: ProfileHeaderNavigation {
+    func navigateToUsersView(with users: [User], title: String) {
+        print("Hello from profile controller")
+        
+        let usersVC =
+            storyboard?.instantiateViewController(
+                withIdentifier: String(describing: UsersViewController.self))
+                as! UsersViewController
+        
+        usersVC.setUsers(with: users)
+        usersVC.customTitle = title
+        
+        self.navigationController?.pushViewController(usersVC, animated: true)
+    }
+    
+    
 }

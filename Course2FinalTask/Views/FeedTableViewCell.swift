@@ -11,8 +11,6 @@ import DataProvider
 
 class FeedTableViewCell: UITableViewCell {
     
-    
-    
     // MARK: - Cell model
     fileprivate var post: Post?
     
@@ -31,6 +29,7 @@ class FeedTableViewCell: UITableViewCell {
         let imageView = UIImageView(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.clipsToBounds = true
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
     
@@ -38,6 +37,7 @@ class FeedTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: SharedConsts.UIConsts.middleFontSize, weight: .semibold)
+        label.isUserInteractionEnabled = true
         return label
     }()
     
@@ -53,6 +53,7 @@ class FeedTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: SharedConsts.UIConsts.middleFontSize, weight: .semibold)
         label.clipsToBounds = true
+        label.isUserInteractionEnabled = true
         return label
     }()
     
@@ -81,6 +82,10 @@ class FeedTableViewCell: UITableViewCell {
         imageView.tintColor = .white
         return imageView
     }()
+    
+    // MARK: - Delegate
+    
+    public var profileNavigationDelegate: FeedViewCellNavigation?
     
     // MARK: - Initializers
     
@@ -149,6 +154,29 @@ class FeedTableViewCell: UITableViewCell {
         
         likeImageView.addGestureRecognizer(likeImageGestureTaprecognizer)
         
+        // Setup profile navigation
+        
+        let fromAvatarNavigation =
+            UITapGestureRecognizer(
+                target: self,
+                action: #selector(handleToUserTap(_:)))
+        
+        authorProfileView.addGestureRecognizer(fromAvatarNavigation)
+        
+        
+        let fromUsernameNavigation =
+        UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleToUserTap(_:)))
+        usernameLabel.addGestureRecognizer(fromUsernameNavigation)
+        
+        // Setup user list navigation
+        
+        let usersListNavigation =
+            UITapGestureRecognizer(
+                target: self,
+                action: #selector(handleLikesTap(_:)))
+        likesLabel.addGestureRecognizer(usersListNavigation)
     }
     
     // MARK: - Selectors
@@ -217,6 +245,39 @@ class FeedTableViewCell: UITableViewCell {
         }
         
         self.configureCell(newPost)
+    }
+    
+    @objc fileprivate func handleToUserTap(_ sender: UITapGestureRecognizer) {
+        print("Going to show you user")
+        
+        if let navigationDelegate = profileNavigationDelegate {
+            guard let userPost = post else {
+                return
+            }
+            
+            navigationDelegate.performProfileNavigation(with: userPost)
+        }
+    }
+    
+    @objc fileprivate func handleLikesTap(_ sender: UITapGestureRecognizer) {
+        print("Going to show you users")
+        
+        if let navigationDelegate = profileNavigationDelegate {
+            guard let userPost = post else {
+                return
+            }
+            
+            let userIds =
+                DataProviders.shared
+                    .postsDataProvider
+                    .usersLikedPost(
+                        with: userPost.id)
+            
+            if let usersLikedIds = userIds {
+                let users = Utils.findUsers(by: usersLikedIds)
+                navigationDelegate.performUsersNavigation(with: users, title: "Likes")
+            }
+        }
     }
     
     // MARK: - Setup GUI

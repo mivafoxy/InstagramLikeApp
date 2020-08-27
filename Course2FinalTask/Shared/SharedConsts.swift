@@ -24,6 +24,7 @@ class SharedConsts {
         static let middleImageSize: CGFloat = 70.0
         
         static let middleFontSize: CGFloat = 14.0
+        static let largeFontSize: CGFloat = 17.0
         
         static let littleOffset: CGFloat = 1.0
         static let smallOffset: CGFloat = 8.0

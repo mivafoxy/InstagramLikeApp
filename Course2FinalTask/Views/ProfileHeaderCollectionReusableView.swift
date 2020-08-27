@@ -11,6 +11,10 @@ import DataProvider
 
 class ProfileHeaderCollectionReusableView: UICollectionReusableView {
     
+    // MARK: - private props
+    
+    fileprivate var userModel: UserModel!
+    
     // MARK: - UI elements
     
     fileprivate lazy var avatarView: UIImageView = {
@@ -31,6 +35,7 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: SharedConsts.UIConsts.middleFontSize, weight: .semibold)
+        label.isUserInteractionEnabled = true
         return label
     }()
     
@@ -38,8 +43,13 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: SharedConsts.UIConsts.middleFontSize, weight: .semibold)
+        label.isUserInteractionEnabled = true
         return label
     }()
+    
+    // MARK: - delegates
+    
+    public var navigationDelegate: ProfileHeaderNavigation?
     
     // MARK: - inits
     
@@ -47,6 +57,7 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         super.init(frame: frame)
         
         self.setupView()
+        self.setupInteraction()
     }
     
     required init?(coder: NSCoder) {
@@ -55,7 +66,9 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
     
     // MARK: - public funcs
     
-    public func configureView(_ user: User) {
+    public func configureView(_ user: UserModel) {
+        self.userModel = user
+        
         self.avatarView.image =
             user.avatar ?? UIImage(named: SharedConsts.Assets.profile.rawValue)
         
@@ -67,6 +80,70 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         
         self.followingLabel.text = "Following: \(user.followsCount)"
         self.followingLabel.sizeToFit()
+    }
+    
+    // MARK: - ui interaction setup
+    
+    fileprivate func setupInteraction() {
+        let toFollowings =
+            UITapGestureRecognizer(
+                target: self,
+                action: #selector(toFollowingsView(_:)))
+        
+        self.followersLabel.addGestureRecognizer(toFollowings)
+        
+        let toFollowed =
+            UITapGestureRecognizer(
+                target: self,
+                action: #selector(toFollowedView(_:)))
+        
+        self.followingLabel.addGestureRecognizer(toFollowed)
+    }
+    
+    // MARK: - selectors
+    
+    @objc fileprivate func toFollowingsView(_ sender: UITapGestureRecognizer) {
+        print("Going to show you followings")
+        
+        guard let delegate =
+            self.navigationDelegate else {
+                return
+        }
+        
+        guard let user =
+            self.userModel else {
+                return
+        }
+        
+        let userId = User.Identifier.init(rawValue: user.id)
+        
+        let users = DataProviders.shared.usersDataProvider.usersFollowingUser(with: userId)
+        
+        if let profiles = users {
+            delegate.navigateToUsersView(with: profiles, title: "Followers")
+        }
+    }
+    
+    @objc fileprivate func toFollowedView(_ sender: UITapGestureRecognizer) {
+        print("Going to show you followed")
+        
+        guard let delegate =
+            self.navigationDelegate else {
+                return
+        }
+        
+        guard let user =
+            self.userModel else {
+                return
+        }
+        
+        let userId = User.Identifier.init(rawValue: user.id)
+        
+        let users = DataProviders.shared.usersDataProvider.usersFollowedByUser(with: userId)
+        
+        if let profiles = users {
+            delegate.navigateToUsersView(with: profiles, title: "Following")
+        }
     }
     
     // MARK: - UI setup
