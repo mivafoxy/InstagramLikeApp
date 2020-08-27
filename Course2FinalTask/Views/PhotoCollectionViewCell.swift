@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DataProvider
 
 class PhotoCollectionViewCell: UICollectionViewCell {
     
@@ -15,12 +16,27 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     fileprivate lazy var photoView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.frame = self.bounds
         return imageView
     }()
     
     // MARK: - init
     
-    public func configureCell(_ image: UIImage) {
-        self.photoView.image = image
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubview(photoView)
+        
+        photoView.widthAnchor.constraint(equalToConstant: self.frame.size.width).isActive = true
+        photoView.heightAnchor.constraint(equalToConstant: self.frame.size.height).isActive = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func configureCell(_ post: Post) {
+        self.photoView.image = post.image
     }
 }
