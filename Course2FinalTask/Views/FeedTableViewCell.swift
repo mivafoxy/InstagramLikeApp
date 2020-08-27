@@ -187,24 +187,35 @@ class FeedTableViewCell: UITableViewCell {
         // Setup a big like scaling animation
         self.setupBigLikeIcon()
         
-        let bigLikeScaleAnimation = CABasicAnimation(keyPath: "transform.scale")
-        bigLikeScaleAnimation.fromValue = 0.0
-        bigLikeScaleAnimation.toValue = 2.0
+        // Мой вариант анимации. Мне кажется он более красивый.
         
-        let bigLikeFadeAnimation = CABasicAnimation(keyPath: #keyPath(CALayer.opacity))
-        bigLikeFadeAnimation.fromValue = 1
-        bigLikeFadeAnimation.toValue = 0.0
+//        let bigLikeScaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+//        bigLikeScaleAnimation.fromValue = 0.0
+//        bigLikeScaleAnimation.toValue = 2.0
+//
+//        let bigLikeFadeAnimation = CABasicAnimation(keyPath: #keyPath(CALayer.opacity))
+//        bigLikeFadeAnimation.fromValue = 1
+//        bigLikeFadeAnimation.toValue = 0.0
+//
+//        let groupAnimation = CAAnimationGroup()
+//        groupAnimation.animations = [ bigLikeScaleAnimation, bigLikeFadeAnimation ]
+//        groupAnimation.duration = 1.0
+//        groupAnimation.fillMode = .removed
+//        groupAnimation.isRemovedOnCompletion = true
+//        groupAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+//
+//        groupAnimation.delegate = self
+//
+//        bigLikeView.layer.add(groupAnimation, forKey: "bigLike")
         
-        let groupAnimation = CAAnimationGroup()
-        groupAnimation.animations = [ bigLikeScaleAnimation, bigLikeFadeAnimation ]
-        groupAnimation.duration = 1.0
-        groupAnimation.fillMode = .removed
-        groupAnimation.isRemovedOnCompletion = true
-        groupAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        let bigLikeAnimation = CAKeyframeAnimation(keyPath: "opacity")
+        bigLikeAnimation.values = [0, 1, 1, 1, 0, 0, 0]
+        bigLikeAnimation.keyTimes = [0, 0.17, 0.33, 0.5, 0.66, 0.83, 1]
+        bigLikeAnimation.duration = 0.6
+        bigLikeAnimation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        bigLikeAnimation.delegate = self
         
-        groupAnimation.delegate = self
-        
-        bigLikeView.layer.add(groupAnimation, forKey: "bigLike")
+        bigLikeView.layer.add(bigLikeAnimation, forKey: "bigLike")
         
         // Change like color, and likes count, and who liked
         

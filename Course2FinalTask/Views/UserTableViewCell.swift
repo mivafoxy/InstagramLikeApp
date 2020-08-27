@@ -13,7 +13,7 @@ class UserTableViewCell: UITableViewCell {
 
     // MARK: - props
     
-    fileprivate var user: User!
+    public var user: User!
     
     // MARK: - UI elements
     
@@ -75,6 +75,7 @@ class UserTableViewCell: UITableViewCell {
     
     @objc fileprivate func toProfileView(_ sender: UITapGestureRecognizer) {
         if let currentUser = user {
+            self.isHighlighted = true
             navigationDelegate?.navigateToProfileView(with: currentUser)
         }
     }

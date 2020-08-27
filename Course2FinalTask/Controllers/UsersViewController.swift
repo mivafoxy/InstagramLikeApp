@@ -31,6 +31,11 @@ class UsersViewController: UITableViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        print("appear")
+        self.tableView.reloadData()
+    }
+    
     // MARK: - table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
