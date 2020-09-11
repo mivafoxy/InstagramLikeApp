@@ -4,14 +4,14 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Tab Controller-->
         <scene sceneID="eFS-3M-GiO">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" modalPresentationStyle="fullScreen" id="H8C-Z0-ief" customClass="TabController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="H8C-Z0-ief" customClass="TabController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" itemPositioning="fill" id="9Q9-2Z-awS">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
@@ -21,7 +21,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="J7S-Cj-ber" kind="relationship" relationship="viewControllers" id="x6Y-GA-RQr"/>
-                        <segue destination="MjP-OY-U3c" kind="relationship" relationship="viewControllers" id="WnF-LY-oeK"/>
+                        <segue destination="Z1k-2s-6BE" kind="relationship" relationship="viewControllers" id="DgP-vu-fEi"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l7R-2J-3Ex" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -57,21 +57,33 @@
             </objects>
             <point key="canvasLocation" x="2381" y="-557"/>
         </scene>
-        <!--Profile-->
-        <scene sceneID="EfH-9n-7xf">
+        <!--Users View Controller-->
+        <scene sceneID="0Ts-kn-9NK">
             <objects>
-                <viewController id="MjP-OY-U3c" customClass="ProfileViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="ld9-PL-eeN">
+                <tableViewController storyboardIdentifier="UsersViewController" id="1cV-WG-bFh" customClass="UsersViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="iaB-WO-PcM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="qG7-WC-GMb"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Profile" image="profile" landscapeImage="profile" largeContentSizeImage="profile" selectedImage="profile" id="buF-oE-uwd"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Y00-As-OSk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserCell" id="qfj-21-OaA" customClass="UserTableViewCell" customModule="Course2FinalTask" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="320" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qfj-21-OaA" id="vQQ-MD-gfQ">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="1cV-WG-bFh" id="GbZ-5T-8Mr"/>
+                            <outlet property="delegate" destination="1cV-WG-bFh" id="8TJ-ig-qj6"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NAu-WP-rdL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1363" y="155"/>
+            <point key="canvasLocation" x="3315" y="-222"/>
         </scene>
         <!--Feed-->
         <scene sceneID="ARR-5a-q2A">
@@ -91,6 +103,60 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MKU-6w-IUE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1361" y="-557"/>
+        </scene>
+        <!--Profile View Controller-->
+        <scene sceneID="z4L-IW-meD">
+            <objects>
+                <collectionViewController storyboardIdentifier="ProfileViewController" id="ea9-uO-GVt" customClass="ProfileViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="mge-Cm-XQ8">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="4D7-6U-x4l">
+                            <size key="itemSize" width="128" height="128"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="eas-8H-u8Q" customClass="PhotoCollectionViewCell" customModule="Course2FinalTask" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="7Fa-iX-ybw">
+                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </collectionViewCellContentView>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="ea9-uO-GVt" id="85j-pM-ifr"/>
+                            <outlet property="delegate" destination="ea9-uO-GVt" id="EZ5-jk-jGy"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="jck-Cf-ZCT"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1pp-gv-8l3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2356.875" y="222.88732394366198"/>
+        </scene>
+        <!--Profile-->
+        <scene sceneID="med-cc-h2O">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Z1k-2s-6BE" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Profile" image="profile" landscapeImage="profile" largeContentSizeImage="profile" selectedImage="profile" id="wZr-ar-7Mt"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="rYo-go-daR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ea9-uO-GVt" kind="relationship" relationship="rootViewController" id="Fk3-db-cTj"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PZ3-OT-lIG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1357.5" y="222.88732394366198"/>
         </scene>
     </scenes>
     <resources>
