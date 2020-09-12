@@ -10,6 +10,12 @@ import UIKit
 import DataProvider
 
 class UsersViewController: UITableViewController {
+    
+    fileprivate lazy var spinnerView: SpinnerViewController = {
+        let spinner = SpinnerViewController()
+        return spinner
+    }()
+    
     fileprivate let userCellId = "UserCell"
     fileprivate var users: [User]?
     
@@ -52,9 +58,34 @@ class UsersViewController: UITableViewController {
         
         return cell
     }
+    
+    // MARK: - UI interactions
+    
+    fileprivate func showSpinnerAsync() {
+        DispatchQueue.main.async {
+            self.addChild(self.spinnerView)
+            self.spinnerView.view.frame = self.view.frame
+            self.view.addSubview(self.spinnerView.view)
+            self.spinnerView.didMove(toParent: self)
+        }
+    }
+    
+    fileprivate func removeSpinnerAsync() {
+        DispatchQueue.main.async {
+            self.spinnerView.willMove(toParent: nil)
+            self.spinnerView.view.removeFromSuperview()
+            self.spinnerView.removeFromParent()
+            self.tableView.reloadData()
+        }
+    }
 }
 
 extension UsersViewController: UserViewCellNavigation {
+    
+    func showLoadSpinnerAsync() {
+        self.showSpinnerAsync()
+    }
+    
     func navigateToProfileView(with user: User) {
         print("Hello from user view controller")
         

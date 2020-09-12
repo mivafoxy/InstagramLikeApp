@@ -11,4 +11,5 @@ import DataProvider
 
 protocol UserViewCellNavigation {
     func navigateToProfileView(with user: User)
+    func showLoadSpinnerAsync()
 }

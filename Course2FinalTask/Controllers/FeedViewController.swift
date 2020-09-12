@@ -10,31 +10,98 @@ import UIKit
 import DataProvider
 
 class FeedViewController : UITableViewController {
-
+    
+    fileprivate lazy var spinnerView: SpinnerViewController = {
+        let viewController = SpinnerViewController()
+        return viewController
+    }()
+    
+    fileprivate let feedQueue = DispatchQueue(label: "controller.feed")
     fileprivate let reuseId = "FeedCell"
+    fileprivate var feed: [Post] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.register(FeedTableViewCell.self, forCellReuseIdentifier: reuseId)
         self.title = "Feed"
+        self.loadFeed()
     }
     
     // MARK: - table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return DataProviders.shared.postsDataProvider.feed().count
+        return feed.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: reuseId) as! FeedTableViewCell
-        cell.configureCell(DataProviders.shared.postsDataProvider.feed()[indexPath.row])
-        cell.profileNavigationDelegate = self
+        
+        if !feed.isEmpty {
+            cell.configureCell(feed[indexPath.row])
+            cell.profileNavigationDelegate = self
+        }
+        
         return cell
+    }
+    
+    // MARK: - fileprivate functions
+    
+    fileprivate func loadFeed()  {
+        
+        self.showSpinnerAsync()
+        
+        let group = DispatchGroup()
+        
+        group.enter()
+        DataProviders
+            .shared
+            .postsDataProvider
+            .feed(queue: feedQueue) { (posts) in
+                
+                if let loaded = posts {
+                    self.safeFeedSet(with: loaded)
+                } else {
+                    print("Error in loadFeed")
+                }
+
+                group.leave()
+        }
+    }
+    
+    fileprivate func safeFeedSet(with posts: [Post]) {
+        feedQueue.async {
+            self.feed = posts
+            self.removeSpinnerAsync()
+        }
+    }
+    
+    // MARK: - UIActions
+    
+    fileprivate func showSpinnerAsync() {
+        DispatchQueue.main.async {
+            self.addChild(self.spinnerView)
+            self.spinnerView.view.frame = self.view.frame
+            self.view.addSubview(self.spinnerView.view)
+            self.spinnerView.didMove(toParent: self)
+        }
+    }
+    
+    fileprivate func removeSpinnerAsync() {
+        DispatchQueue.main.async {
+            self.spinnerView.willMove(toParent: nil)
+            self.spinnerView.view.removeFromSuperview()
+            self.spinnerView.removeFromParent()
+            self.tableView.reloadData()
+        }
     }
 }
 
 extension FeedViewController: FeedViewCellNavigation {
+    func showLoadSpinnerAsync() {
+        self.showSpinnerAsync()
+    }
+    
     func performProfileNavigation(with post: Post) {
         print("hello from controller!")
         

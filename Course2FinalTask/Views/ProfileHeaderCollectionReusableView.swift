@@ -11,6 +11,9 @@ import DataProvider
 
 class ProfileHeaderCollectionReusableView: UICollectionReusableView {
     
+    // MARK: - queue
+    fileprivate let profileHeaderQueue = DispatchQueue(label: "view.header.profile")
+    
     // MARK: - private props
     
     fileprivate var userModel: UserModel!
@@ -105,44 +108,65 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
     @objc fileprivate func toFollowingsView(_ sender: UITapGestureRecognizer) {
         print("Going to show you followings")
         
-        guard let delegate =
-            self.navigationDelegate else {
-                return
-        }
-        
-        guard let user =
-            self.userModel else {
-                return
-        }
-        
-        let userId = User.Identifier.init(rawValue: user.id)
-        
-        let users = DataProviders.shared.usersDataProvider.usersFollowingUser(with: userId)
-        
-        if let profiles = users {
-            delegate.navigateToUsersView(with: profiles, title: "Followers")
-        }
+        self.loadFollowingUsers()
     }
     
     @objc fileprivate func toFollowedView(_ sender: UITapGestureRecognizer) {
         print("Going to show you followed")
         
-        guard let delegate =
-            self.navigationDelegate else {
-                return
-        }
+        self.loadFollowedUsers()
         
-        guard let user =
-            self.userModel else {
-                return
+    }
+    
+    // MARK: - fileprivate functions
+    
+    fileprivate func loadFollowingUsers() {
+        
+        guard let user = self.userModel else {
+            print("Where is current userModel?")
+            return
         }
         
         let userId = User.Identifier.init(rawValue: user.id)
         
-        let users = DataProviders.shared.usersDataProvider.usersFollowedByUser(with: userId)
+        self.navigationDelegate?.showLoadSpinnerAsync()
         
-        if let profiles = users {
-            delegate.navigateToUsersView(with: profiles, title: "Following")
+        DataProviders
+            .shared
+            .usersDataProvider
+            .usersFollowingUser(with: userId, queue: profileHeaderQueue) { (users) in
+                if let loadedUsers = users {
+                    DispatchQueue.main.async {
+                        self.navigationDelegate?.navigateToUsersView(with: loadedUsers, title: "Followed")
+                    }
+                } else {
+                    print("Error in loadFollowingUsers")
+                }
+ 
+        }
+    }
+    
+    fileprivate func loadFollowedUsers() {
+        guard let user = self.userModel else {
+            print("Where is current userModel?")
+            return
+        }
+        
+        let userId = User.Identifier.init(rawValue: user.id)
+        
+        self.navigationDelegate?.showLoadSpinnerAsync()
+        
+        DataProviders
+            .shared
+            .usersDataProvider
+            .usersFollowedByUser(with: userId, queue: profileHeaderQueue) { (users) in
+                if let loadedUsers = users {
+                    DispatchQueue.main.async {
+                        self.navigationDelegate?.navigateToUsersView(with: loadedUsers, title: "Following")
+                    }
+                } else {
+                    print("Error in loadFollowedUsers")
+                }
         }
     }
     

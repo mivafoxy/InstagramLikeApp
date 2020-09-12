@@ -17,6 +17,8 @@ import DataProvider
 
 class UserModel {
     
+    fileprivate let postQueue = DispatchQueue(label: "model.user")
+    
     public var id: String
     
     public var userPosts: [Post]
@@ -42,7 +44,7 @@ class UserModel {
     /// Количество подписчиков этого пользователя
     public var followedByCount: Int
     
-    public init(_ user: User) {
+    public init(_ user: User, _ posts: [Post]) {
         username = user.username
         fullName = user.fullName
         avatar = user.avatar
@@ -51,15 +53,6 @@ class UserModel {
         followsCount = user.followsCount
         followedByCount = user.followedByCount
         id = user.id.rawValue
-        
-        userPosts = DataProviders.shared.postsDataProvider.findPosts(by: user.id) ?? []
-    }
-    
-    public convenience init?(_ post: Post) {
-        guard let user = DataProviders.shared.usersDataProvider.user(with: post.author) else {
-            return nil
-        }
-        
-        self.init(user)
+        userPosts = posts
     }
 }

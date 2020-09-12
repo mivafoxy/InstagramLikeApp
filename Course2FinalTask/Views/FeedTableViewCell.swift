@@ -11,6 +11,8 @@ import DataProvider
 
 class FeedTableViewCell: UITableViewCell {
     
+    fileprivate let feedCellQueue = DispatchQueue(label: "cell.feed")
+    
     // MARK: - Cell model
     fileprivate var post: Post?
     
@@ -219,21 +221,7 @@ class FeedTableViewCell: UITableViewCell {
         
         // Change like color, and likes count, and who liked
         
-        guard let currentPost = post else { return }
-        
-        let hasLike = DataProviders.shared.postsDataProvider.likePost(with: currentPost.id)
-        
-        if hasLike {
-            let newPostData =
-                DataProviders.shared
-                    .postsDataProvider
-                    .post(
-                        with: currentPost.id)
-            
-            guard let newPost = newPostData else { return }
-            
-            configureCell(newPost)
-        }
+        self.likeFromCurrentUser()
     }
     
     @objc fileprivate func handleLikeImageTap(_ sender: UITapGestureRecognizer) {
@@ -242,20 +230,10 @@ class FeedTableViewCell: UITableViewCell {
         guard let currentPost = post else { return }
         
         if currentPost.currentUserLikesThisPost {
-            _ = DataProviders.shared.postsDataProvider.unlikePost(with: currentPost.id)
+            self.unlikeFromCurrentUser()
         } else {
-            _ = DataProviders.shared.postsDataProvider.likePost(with: currentPost.id)
+            self.likeFromCurrentUser()
         }
-        
-        guard let newPost =
-            DataProviders.shared
-                .postsDataProvider
-                .post(
-                    with: currentPost.id) else {
-                        return
-        }
-        
-        self.configureCell(newPost)
     }
     
     @objc fileprivate func handleToUserTap(_ sender: UITapGestureRecognizer) {
@@ -274,23 +252,88 @@ class FeedTableViewCell: UITableViewCell {
         print("Going to show you users")
         
         if let navigationDelegate = profileNavigationDelegate {
-            guard let userPost = post else {
-                return
-            }
-            
-            let userIds =
-                DataProviders.shared
-                    .postsDataProvider
-                    .usersLikedPost(
-                        with: userPost.id)
-            
-            if let usersLikedIds = userIds {
-                let users = Utils.findUsers(by: usersLikedIds)
-                navigationDelegate.performUsersNavigation(with: users, title: "Likes")
-            }
+            let likedUsers = self.loadLikedUsers()
+            navigationDelegate.performUsersNavigation(with: likedUsers, title: "Likes")
         }
     }
     
+    // MARK: - fileprivate functions
+    
+    fileprivate func likeFromCurrentUser() {
+        guard let currentPost = post else {
+            print("Where is current post?")
+            return
+        }
+        
+        DataProviders
+            .shared
+            .postsDataProvider
+            .likePost(with: currentPost.id, queue: feedCellQueue) {(post) in
+                guard let likedPost = post else {
+                    print("Error in hasLikeFromCurrentUser")
+                    return
+                }
+                
+                self.safeCurrentPostUpdate(with: likedPost)
+        }
+
+    }
+    
+    fileprivate func unlikeFromCurrentUser() {
+        guard let currentPost = post else {
+            print("Where is current post?")
+            return
+        }
+        
+        DataProviders
+            .shared
+            .postsDataProvider
+            .unlikePost(with: currentPost.id, queue: feedCellQueue) { (post) in
+                guard let unlikedPost = post else {
+                    print("Error when unlike")
+                    return
+                }
+                
+                self.safeCurrentPostUpdate(with: unlikedPost)
+        }
+    }
+    
+    fileprivate func loadLikedUsers() -> [User] {
+        guard let currentPost = post else {
+            print("Where is current post?!")
+            return []
+        }
+        
+        var users = [User]()
+        let group = DispatchGroup()
+        
+        group.enter()
+        
+        DataProviders
+            .shared
+            .postsDataProvider
+            .usersLikedPost(with: currentPost.id, queue: feedCellQueue) { (loadedUsers) in
+                if let currentUsers = loadedUsers {
+                    users = currentUsers
+                } else {
+                    print("Error in loadLikedUsers")
+                }
+                
+                group.leave()
+        }
+        
+        return users
+    }
+    
+    fileprivate func safeCurrentPostUpdate(with post: Post) {
+        feedCellQueue.async {
+            self.post = post
+            
+            DispatchQueue.main.async {
+                self.configureCell(post)
+            }
+        }
+    }
     // MARK: - Setup GUI
     
     fileprivate func setupView() {
