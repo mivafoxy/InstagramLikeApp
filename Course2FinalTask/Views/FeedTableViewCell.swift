@@ -88,6 +88,7 @@ class FeedTableViewCell: UITableViewCell {
     // MARK: - Delegate
     
     public var profileNavigationDelegate: FeedViewCellNavigation?
+    public var profileAlertDelegate: AlertDelegate?
     
     // MARK: - Initializers
     
@@ -250,11 +251,7 @@ class FeedTableViewCell: UITableViewCell {
     
     @objc fileprivate func handleLikesTap(_ sender: UITapGestureRecognizer) {
         print("Going to show you users")
-        
-        if let navigationDelegate = profileNavigationDelegate {
-            let likedUsers = self.loadLikedUsers()
-            navigationDelegate.performUsersNavigation(with: likedUsers, title: "Likes")
-        }
+        self.loadLikedUsers()
     }
     
     // MARK: - fileprivate functions
@@ -298,13 +295,14 @@ class FeedTableViewCell: UITableViewCell {
         }
     }
     
-    fileprivate func loadLikedUsers() -> [User] {
+    fileprivate func loadLikedUsers() {
+        profileNavigationDelegate?.showLoadSpinnerAsync()
+        
         guard let currentPost = post else {
             print("Where is current post?!")
-            return []
+            return
         }
         
-        var users = [User]()
         let group = DispatchGroup()
         
         group.enter()
@@ -314,15 +312,19 @@ class FeedTableViewCell: UITableViewCell {
             .postsDataProvider
             .usersLikedPost(with: currentPost.id, queue: feedCellQueue) { (loadedUsers) in
                 if let currentUsers = loadedUsers {
-                    users = currentUsers
+                    self.profileNavigationDelegate?
+                        .performUsersNavigation(
+                            with: currentUsers,
+                            title: "Likes")
                 } else {
-                    print("Error in loadLikedUsers")
+                    self.profileAlertDelegate?
+                        .showAlert(
+                            title: SharedConsts.TextConsts.errorTitle,
+                            message: SharedConsts.TextConsts.errorSmthWrong)
                 }
                 
                 group.leave()
         }
-        
-        return users
     }
     
     fileprivate func safeCurrentPostUpdate(with post: Post) {

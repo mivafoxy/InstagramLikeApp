@@ -30,4 +30,13 @@ class SharedConsts {
         static let smallOffset: CGFloat = 8.0
         static let middleOffset: CGFloat = 15.0
     }
+    
+    struct TextConsts {
+        
+        static let errorTitle = "Ошибка"
+        static let errorSmthWrong = "Что-то пошло не так, попробуйте снова."
+        static let noData = "Нет данных"
+        static let retry = "Повторить"
+        static let goBack = "Назад"
+    }
 }

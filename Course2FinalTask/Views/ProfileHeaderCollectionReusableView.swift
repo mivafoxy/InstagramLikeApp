@@ -53,6 +53,7 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
     // MARK: - delegates
     
     public var navigationDelegate: ProfileHeaderNavigation?
+    public var alertDelegate: AlertDelegate?
     
     // MARK: - inits
     
@@ -140,7 +141,9 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
                         self.navigationDelegate?.navigateToUsersView(with: loadedUsers, title: "Followed")
                     }
                 } else {
-                    print("Error in loadFollowingUsers")
+                    self.alertDelegate?.showAlert(
+                        title: SharedConsts.TextConsts.errorTitle,
+                        message: SharedConsts.TextConsts.errorSmthWrong)
                 }
  
         }
@@ -165,7 +168,10 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
                         self.navigationDelegate?.navigateToUsersView(with: loadedUsers, title: "Following")
                     }
                 } else {
-                    print("Error in loadFollowedUsers")
+                    self.alertDelegate?
+                        .showAlert(
+                            title: SharedConsts.TextConsts.errorTitle,
+                            message: SharedConsts.TextConsts.errorSmthWrong)
                 }
         }
     }

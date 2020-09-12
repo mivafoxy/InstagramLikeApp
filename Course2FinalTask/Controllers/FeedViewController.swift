@@ -40,6 +40,7 @@ class FeedViewController : UITableViewController {
         if !feed.isEmpty {
             cell.configureCell(feed[indexPath.row])
             cell.profileNavigationDelegate = self
+            cell.profileAlertDelegate = self
         }
         
         return cell
@@ -62,7 +63,12 @@ class FeedViewController : UITableViewController {
                 if let loaded = posts {
                     self.safeFeedSet(with: loaded)
                 } else {
-                    print("Error in loadFeed")
+                    Utils.showAlertAsync(
+                        on: self,
+                        title: SharedConsts.TextConsts.errorTitle,
+                        message: SharedConsts.TextConsts.errorSmthWrong,
+                        completion: { _ in self.loadFeed() },
+                        discard: { _ in self.removeSpinnerAsync() })
                 }
 
                 group.leave()
@@ -126,4 +132,19 @@ extension FeedViewController: FeedViewCellNavigation {
         
         self.navigationController?.pushViewController(usersVC, animated: true)
     }
+}
+
+extension FeedViewController: AlertDelegate {
+    func showAlert(title: String, message: String) {
+        Utils.showAlertAsync(
+            on: self,
+            title: title,
+            message: message,
+            completion: nil,
+            discard: nil)
+        
+        self.removeSpinnerAsync()
+    }
+    
+    
 }

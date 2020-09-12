@@ -98,6 +98,7 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
         if let user = self.userModel {
             header.configureView(user)
             header.navigationDelegate = self
+            header.alertDelegate = self
         }
 
         return header
@@ -133,8 +134,12 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
             .postsDataProvider
             .findPosts(by: user.id, queue: profileQueue) { (posts) in
                 guard let userPosts = posts else {
-                    // TODO: - make error view
-                    print("Error in user model loading")
+                    Utils.showAlertAsync(
+                        on: self,
+                        title: SharedConsts.TextConsts.errorTitle,
+                        message: SharedConsts.TextConsts.errorSmthWrong,
+                        completion: { _ in self.loadUserModel(from: user) },
+                        discard: { _ in self.removeSpinnerAsync() })
                     return
                 }
                 
@@ -151,7 +156,12 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
             .usersDataProvider
             .user(with: post.author, queue: profileQueue) { (user) in
                 guard let loadedUser = user else {
-                    print("Error in user loading from post")
+                    Utils.showAlertAsync(
+                        on: self,
+                        title: SharedConsts.TextConsts.errorTitle,
+                        message: SharedConsts.TextConsts.errorSmthWrong,
+                        completion: { _ in self.loadUserModel(from: post) },
+                        discard: { _ in self.removeSpinnerAsync() })
                     return
                 }
                 
@@ -167,7 +177,12 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
             .usersDataProvider
             .currentUser(queue: profileQueue) { (user) in
                 guard let loadedUser = user else {
-                    print("Error when load current user")
+                    Utils.showAlertAsync(
+                        on: self,
+                        title: SharedConsts.TextConsts.errorTitle,
+                        message: SharedConsts.TextConsts.errorSmthWrong,
+                        completion: { _ in self.loadCurrentUser() },
+                        discard: { _ in self.removeSpinnerAsync() })
                     return
                 }
                 
@@ -220,6 +235,21 @@ extension ProfileViewController: ProfileHeaderNavigation {
         usersVC.customTitle = title
         
         self.navigationController?.pushViewController(usersVC, animated: true)
+    }
+    
+    
+}
+
+extension ProfileViewController: AlertDelegate {
+    func showAlert(title: String, message: String) {
+        Utils.showAlertAsync(
+            on: self,
+            title: title,
+            message: message,
+            completion: nil,
+            discard: nil)
+        
+        self.removeSpinnerAsync()
     }
     
     
