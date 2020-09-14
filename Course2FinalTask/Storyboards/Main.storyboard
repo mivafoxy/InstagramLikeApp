@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H8C-Z0-ief">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H8C-Z0-ief">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -21,6 +21,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="J7S-Cj-ber" kind="relationship" relationship="viewControllers" id="x6Y-GA-RQr"/>
+                        <segue destination="bzW-ZA-mVx" kind="relationship" relationship="viewControllers" id="7ql-W5-fos"/>
                         <segue destination="Z1k-2s-6BE" kind="relationship" relationship="viewControllers" id="DgP-vu-fEi"/>
                     </connections>
                 </tabBarController>
@@ -139,6 +140,41 @@
             </objects>
             <point key="canvasLocation" x="2356.875" y="222.88732394366198"/>
         </scene>
+        <!--New Post Collection View Controller-->
+        <scene sceneID="6WK-yf-4GX">
+            <objects>
+                <collectionViewController id="kRl-8R-kow" customClass="NewPostCollectionViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="RgQ-RU-nzL">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="fow-ID-r8T">
+                            <size key="itemSize" width="128" height="128"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="H3N-kw-WLR">
+                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="qno-Kj-Wt3">
+                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </collectionViewCellContentView>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="kRl-8R-kow" id="BEU-1x-8ny"/>
+                            <outlet property="delegate" destination="kRl-8R-kow" id="s0K-Y3-y0q"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="xeQ-7l-Ol3"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fHX-WC-QHd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1358" y="950"/>
+        </scene>
         <!--Profile-->
         <scene sceneID="med-cc-h2O">
             <objects>
@@ -158,9 +194,29 @@
             </objects>
             <point key="canvasLocation" x="1357.5" y="222.88732394366198"/>
         </scene>
+        <!--New-->
+        <scene sceneID="pkG-Ct-q1u">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bzW-ZA-mVx" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="New" image="plus" landscapeImage="plus" largeContentSizeImage="plus" selectedImage="plus" id="uCu-Qf-AXn"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="YZn-sT-TF9">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="kRl-8R-kow" kind="relationship" relationship="rootViewController" id="UfI-rm-ZIc"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QpX-rk-fw1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="309" y="950"/>
+        </scene>
     </scenes>
     <resources>
         <image name="feed" width="25" height="25"/>
+        <image name="plus" width="25" height="25"/>
         <image name="profile" width="25" height="25"/>
     </resources>
 </document>

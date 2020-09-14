@@ -88,7 +88,7 @@ class FeedTableViewCell: UITableViewCell {
     // MARK: - Delegate
     
     public var profileNavigationDelegate: FeedViewCellNavigation?
-    public var profileAlertDelegate: AlertDelegate?
+    public var controllerDelegate: UIControllerDelegate?
     
     // MARK: - Initializers
     
@@ -245,7 +245,7 @@ class FeedTableViewCell: UITableViewCell {
                 return
             }
             
-            navigationDelegate.performProfileNavigation(with: userPost)
+            navigationDelegate.performProfileNavigation(with: userPost) // Сделать обработку ошибки (возврат обратно на предыдущий экран)
         }
     }
     
@@ -317,7 +317,7 @@ class FeedTableViewCell: UITableViewCell {
                             with: currentUsers,
                             title: "Likes")
                 } else {
-                    self.profileAlertDelegate?
+                    self.controllerDelegate?
                         .showAlert(
                             title: SharedConsts.TextConsts.errorTitle,
                             message: SharedConsts.TextConsts.errorSmthWrong)

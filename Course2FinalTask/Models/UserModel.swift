@@ -17,7 +17,7 @@ import DataProvider
 
 class UserModel {
     
-    fileprivate let postQueue = DispatchQueue(label: "model.user")
+    public let isCurrentUser: Bool
     
     public var id: String
     
@@ -44,7 +44,7 @@ class UserModel {
     /// Количество подписчиков этого пользователя
     public var followedByCount: Int
     
-    public init(_ user: User, _ posts: [Post]) {
+    public init(_ user: User, _ posts: [Post], _ isCurrentUser: Bool) {
         username = user.username
         fullName = user.fullName
         avatar = user.avatar
@@ -54,5 +54,6 @@ class UserModel {
         followedByCount = user.followedByCount
         id = user.id.rawValue
         userPosts = posts
+        self.isCurrentUser = isCurrentUser
     }
 }

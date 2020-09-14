@@ -11,5 +11,4 @@ import DataProvider
 
 protocol ProfileHeaderNavigation {
     func navigateToUsersView(with users: [User], title: String)
-    func showLoadSpinnerAsync()
 }

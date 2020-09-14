@@ -50,10 +50,35 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         return label
     }()
     
+    fileprivate lazy var followButton: UIButton = {
+        let button = UIButton(frame: .zero)
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        let hexColor = 0x0096FF
+        button.backgroundColor = .systemBlue
+        
+        
+        button.setTitle("Follow", for: .normal)
+        button.titleLabel?.font =
+            .systemFont(
+                ofSize: SharedConsts.UIConsts.middleFontSize + 1)
+        
+        button.contentEdgeInsets = UIEdgeInsets(top: 6.0, left: 6.0, bottom: 6.0, right: 6.0)
+        
+        button.layer.cornerRadius = 5
+        button.isUserInteractionEnabled = true
+        
+        return button
+    }()
+    
     // MARK: - delegates
     
     public var navigationDelegate: ProfileHeaderNavigation?
-    public var alertDelegate: AlertDelegate?
+    public var controllerDelegate: UIControllerDelegate?
+    
+    // MARK: - fields
+    public var isConfiguredOnce: Bool = false // collectionView called multiple times. I don't know how to avoid it.
     
     // MARK: - inits
     
@@ -71,6 +96,16 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
     // MARK: - public funcs
     
     public func configureView(_ user: UserModel) {
+        
+        if !user.isCurrentUser {
+            self.followButton.isHidden = false
+            self.checkCurrentUserFollowing(and: { isFollowing in
+                DispatchQueue.main.async {
+                    self.setupFollowButton(isFollowed: isFollowing)
+                    self.controllerDelegate?.hideSpinnerAsync()
+                }
+            })
+        }
         self.userModel = user
         
         self.avatarView.image =
@@ -84,6 +119,8 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         
         self.followingLabel.text = "Following: \(user.followsCount)"
         self.followingLabel.sizeToFit()
+        
+        self.isConfiguredOnce = true
     }
     
     // MARK: - ui interaction setup
@@ -102,6 +139,9 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
                 action: #selector(toFollowedView(_:)))
         
         self.followingLabel.addGestureRecognizer(toFollowed)
+        
+        followButton.addTarget(self, action: #selector(followUser(_:)), for: .touchDown)
+        followButton.addTarget(self, action: #selector(animateUp(sender:)), for: .touchUpInside)
     }
     
     // MARK: - selectors
@@ -109,7 +149,18 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
     @objc fileprivate func toFollowingsView(_ sender: UITapGestureRecognizer) {
         print("Going to show you followings")
         
-        self.loadFollowingUsers()
+        self.loadFollowingUsers() { (users) in
+            if let loadedUsers = users {
+                DispatchQueue.main.async {
+                    self.navigationDelegate?.navigateToUsersView(with: loadedUsers, title: "Following")
+                }
+            } else {
+                self.controllerDelegate?.showAlert(
+                    title: SharedConsts.TextConsts.errorTitle,
+                    message: SharedConsts.TextConsts.errorSmthWrong)
+            }
+            
+        }
     }
     
     @objc fileprivate func toFollowedView(_ sender: UITapGestureRecognizer) {
@@ -119,9 +170,48 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         
     }
     
+    @objc fileprivate func followUser(_ sender: UIButton) {
+        print("Hello from follow!")
+        
+        self.controllerDelegate?.showLoadSpinnerAsync()
+        
+        let userId = User.Identifier.init(rawValue: userModel.id)
+        
+        self.checkCurrentUserFollowing() { (following) in
+            if following {
+                self.unfollowUser(by: userId)
+            } else {
+                self.followUser(by: userId)
+            }
+            
+            self.controllerDelegate?.hideSpinnerAsync()
+        }
+        
+        animateDown(sender: sender)
+    }
+    
+    fileprivate func animateDown(sender: UIButton) {
+        animate(sender, transform: CGAffineTransform.identity.scaledBy(x: 0.70, y: 0.70))
+    }
+    
+    @objc private func animateUp(sender: UIButton) {
+        animate(sender, transform: .identity)
+    }
+    
+    private func animate(_ button: UIButton, transform: CGAffineTransform) {
+        UIView.animate(withDuration: 0.4,
+                       delay: 0,
+                       usingSpringWithDamping: 0.3,
+                       initialSpringVelocity: 6,
+                       options: [.curveEaseOut],
+                       animations: {
+                        button.transform = transform
+        }, completion: nil)
+    }
+    
     // MARK: - fileprivate functions
     
-    fileprivate func loadFollowingUsers() {
+    fileprivate func loadFollowingUsers(_ completion: @escaping ([User]?) -> (Void)) {
         
         guard let user = self.userModel else {
             print("Where is current userModel?")
@@ -130,23 +220,13 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         
         let userId = User.Identifier.init(rawValue: user.id)
         
-        self.navigationDelegate?.showLoadSpinnerAsync()
-        
         DataProviders
             .shared
             .usersDataProvider
-            .usersFollowingUser(with: userId, queue: profileHeaderQueue) { (users) in
-                if let loadedUsers = users {
-                    DispatchQueue.main.async {
-                        self.navigationDelegate?.navigateToUsersView(with: loadedUsers, title: "Followed")
-                    }
-                } else {
-                    self.alertDelegate?.showAlert(
-                        title: SharedConsts.TextConsts.errorTitle,
-                        message: SharedConsts.TextConsts.errorSmthWrong)
-                }
- 
-        }
+            .usersFollowingUser(
+                with: userId,
+                queue: profileHeaderQueue,
+                handler: completion)
     }
     
     fileprivate func loadFollowedUsers() {
@@ -157,7 +237,7 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         
         let userId = User.Identifier.init(rawValue: user.id)
         
-        self.navigationDelegate?.showLoadSpinnerAsync()
+        self.controllerDelegate?.showLoadSpinnerAsync()
         
         DataProviders
             .shared
@@ -165,13 +245,81 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
             .usersFollowedByUser(with: userId, queue: profileHeaderQueue) { (users) in
                 if let loadedUsers = users {
                     DispatchQueue.main.async {
-                        self.navigationDelegate?.navigateToUsersView(with: loadedUsers, title: "Following")
+                        self.navigationDelegate?.navigateToUsersView(with: loadedUsers, title: "Followed")
                     }
                 } else {
-                    self.alertDelegate?
+                    self.controllerDelegate?
                         .showAlert(
                             title: SharedConsts.TextConsts.errorTitle,
                             message: SharedConsts.TextConsts.errorSmthWrong)
+                }
+        }
+    }
+    
+    fileprivate func followUser(by userId: User.Identifier) {
+        DataProviders
+            .shared
+            .usersDataProvider
+            .follow(userId, queue: profileHeaderQueue) { (user) in
+                if let loadedUser = user {
+                    DispatchQueue.main.async {
+                        self.setupFollowButton(isFollowed: true)
+                        self.configureView(
+                            UserModel(
+                                loadedUser,
+                                self.userModel.userPosts,
+                                false))
+                    }
+                } else {
+                    self.controllerDelegate?.showAlert(
+                        title: SharedConsts.TextConsts.errorTitle,
+                        message: SharedConsts.TextConsts.errorSmthWrong)
+                }
+        }
+    }
+    
+    fileprivate func unfollowUser(by userId: User.Identifier) {
+        DataProviders
+            .shared
+            .usersDataProvider
+            .unfollow(userId, queue: profileHeaderQueue) { (user) in
+                if let loadedUser = user {
+                    DispatchQueue.main.async {
+                        self.setupFollowButton(isFollowed: false)
+                        self.configureView(
+                            UserModel(
+                                loadedUser,
+                                self.userModel.userPosts,
+                                false))
+                    }
+                } else {
+                    self.controllerDelegate?
+                        .showAlert(
+                            title: SharedConsts.TextConsts.errorTitle,
+                            message: SharedConsts.TextConsts.errorSmthWrong)
+                }
+        }
+    }
+    
+    fileprivate func checkCurrentUserFollowing(and completeWith: @escaping (Bool) -> (Void)) {
+        DataProviders
+            .shared
+            .usersDataProvider
+            .currentUser(queue: profileHeaderQueue) { (currentUser) in
+                if let loadedCurrentUser = currentUser {
+                    self.loadFollowingUsers() { (users) in
+                        if let loadedUsers = users {
+                            completeWith(
+                                loadedUsers.contains(
+                                    where: { loadedUser in
+                                        loadedUser.id == loadedCurrentUser.id }))
+                        } else {
+                            self.controllerDelegate?
+                                .showAlert(
+                                    title: SharedConsts.TextConsts.errorTitle,
+                                    message: SharedConsts.TextConsts.errorSmthWrong)
+                        }
+                    }
                 }
         }
     }
@@ -202,6 +350,20 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         
         followingLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -1*SharedConsts.UIConsts.smallOffset).isActive = true
         followingLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -1*SharedConsts.UIConsts.middleOffset).isActive = true
+        
+        self.addSubview(followButton)
+        
+        followButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -1*SharedConsts.UIConsts.middleOffset).isActive = true
+        followButton.topAnchor.constraint(equalTo: self.topAnchor, constant: SharedConsts.UIConsts.smallOffset).isActive = true
+        followButton.isHidden = true
+    }
+    
+    fileprivate func setupFollowButton(isFollowed: Bool) {
+        if isFollowed {
+            followButton.setTitle("Unfollow", for: .normal)
+        } else {
+            followButton.setTitle("Follow", for: .normal)
+        }
     }
     
 }

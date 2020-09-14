@@ -45,6 +45,7 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        showSpinnerAsync()
         
         self.collectionView.register(
             PhotoCollectionViewCell.self,
@@ -60,11 +61,6 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
         }
         
         self.navigationItem.title = userModel?.username
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.removeSpinnerAsync()
     }
     
     // MARK: - Collection view
@@ -95,12 +91,15 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
                 withReuseIdentifier: headerId,
                 for: indexPath) as! ProfileHeaderCollectionReusableView
         
-        if let user = self.userModel {
-            header.configureView(user)
-            header.navigationDelegate = self
-            header.alertDelegate = self
+        if !header.isConfiguredOnce {
+            if let user = self.userModel {
+                self.showSpinnerAsync()
+                header.configureView(user)
+                header.navigationDelegate = self
+                header.controllerDelegate = self
+            }
         }
-
+        
         return header
     }
     
@@ -126,9 +125,7 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
     
     // MARK: - fileprivate funcs
     
-    fileprivate func loadUserModel(from user: User) {
-        showSpinnerAsync()
-        
+    fileprivate func loadUserModel(from user: User, _ isCurrentUser: Bool = false) {
         DataProviders
             .shared
             .postsDataProvider
@@ -143,14 +140,19 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
                     return
                 }
                 
-                let model = UserModel(user, userPosts)
+                let model: UserModel
+                
+                if user.username == SharedConsts.ShittyConst.mainUserLogin {
+                    model = UserModel(user, userPosts, true)
+                } else {
+                    model = UserModel(user, userPosts, isCurrentUser)
+                }
+                
                 self.safeSetUserModel(with: model)
         }
     }
     
     fileprivate func loadUserModel(from post: Post) {
-        showSpinnerAsync()
-        
         DataProviders
             .shared
             .usersDataProvider
@@ -170,8 +172,6 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
     }
     
     fileprivate func loadCurrentUser() {
-        showSpinnerAsync()
-        
         DataProviders
             .shared
             .usersDataProvider
@@ -186,7 +186,7 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
                     return
                 }
                 
-                self.loadUserModel(from: loadedUser)
+                self.loadUserModel(from: loadedUser, true)
         }
     }
     
@@ -219,9 +219,7 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
 }
 
 extension ProfileViewController: ProfileHeaderNavigation {
-    func showLoadSpinnerAsync() {
-        self.showSpinnerAsync()
-    }
+    
     
     func navigateToUsersView(with users: [User], title: String) {
         print("Hello from profile controller")
@@ -234,13 +232,23 @@ extension ProfileViewController: ProfileHeaderNavigation {
         usersVC.setUsers(with: users)
         usersVC.customTitle = title
         
+        removeSpinnerAsync()
+        
         self.navigationController?.pushViewController(usersVC, animated: true)
     }
     
     
 }
 
-extension ProfileViewController: AlertDelegate {
+extension ProfileViewController: UIControllerDelegate {
+    func hideSpinnerAsync() {
+        self.removeSpinnerAsync()
+    }
+    
+    func showLoadSpinnerAsync() {
+        self.showSpinnerAsync()
+    }
+    
     func showAlert(title: String, message: String) {
         Utils.showAlertAsync(
             on: self,
@@ -251,6 +259,4 @@ extension ProfileViewController: AlertDelegate {
         
         self.removeSpinnerAsync()
     }
-    
-    
 }

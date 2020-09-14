@@ -40,7 +40,7 @@ class FeedViewController : UITableViewController {
         if !feed.isEmpty {
             cell.configureCell(feed[indexPath.row])
             cell.profileNavigationDelegate = self
-            cell.profileAlertDelegate = self
+            cell.controllerDelegate = self
         }
         
         return cell
@@ -104,9 +104,7 @@ class FeedViewController : UITableViewController {
 }
 
 extension FeedViewController: FeedViewCellNavigation {
-    func showLoadSpinnerAsync() {
-        self.showSpinnerAsync()
-    }
+    
     
     func performProfileNavigation(with post: Post) {
         print("hello from controller!")
@@ -134,7 +132,7 @@ extension FeedViewController: FeedViewCellNavigation {
     }
 }
 
-extension FeedViewController: AlertDelegate {
+extension FeedViewController: UIControllerDelegate {
     func showAlert(title: String, message: String) {
         Utils.showAlertAsync(
             on: self,
@@ -146,5 +144,11 @@ extension FeedViewController: AlertDelegate {
         self.removeSpinnerAsync()
     }
     
+    func showLoadSpinnerAsync() {
+        self.showSpinnerAsync()
+    }
     
+    func hideSpinnerAsync() {
+        self.removeSpinnerAsync()
+    }
 }

@@ -17,6 +17,11 @@ class SharedConsts {
         case bigLike = "bigLike"
     }
     
+    struct ShittyConst {
+        
+        static let mainUserLogin = "ivan1975" // Shitty but need for passing last course...
+    }
+    
     struct UIConsts {
         
         static let littleImageSize: CGFloat = 35.0
