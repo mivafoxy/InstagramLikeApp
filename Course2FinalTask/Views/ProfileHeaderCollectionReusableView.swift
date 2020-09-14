@@ -106,6 +106,7 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
                 }
             })
         }
+        
         self.userModel = user
         
         self.avatarView.image =
@@ -149,6 +150,8 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
     @objc fileprivate func toFollowingsView(_ sender: UITapGestureRecognizer) {
         print("Going to show you followings")
         
+        self.controllerDelegate?.showLoadSpinnerAsync()
+        
         self.loadFollowingUsers() { (users) in
             if let loadedUsers = users {
                 DispatchQueue.main.async {
@@ -159,7 +162,6 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
                     title: SharedConsts.TextConsts.errorTitle,
                     message: SharedConsts.TextConsts.errorSmthWrong)
             }
-            
         }
     }
     

@@ -93,7 +93,10 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
         
         if !header.isConfiguredOnce {
             if let user = self.userModel {
-                self.showSpinnerAsync()
+                if !user.isCurrentUser {
+                    self.showSpinnerAsync()
+                }
+                
                 header.configureView(user)
                 header.navigationDelegate = self
                 header.controllerDelegate = self
