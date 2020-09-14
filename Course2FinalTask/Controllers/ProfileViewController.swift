@@ -74,7 +74,7 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
         let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: reuseId, for: indexPath) as! PhotoCollectionViewCell
         
         if let userPosts = userModel?.userPosts {
-            cell.configureCell(userPosts[indexPath.row])
+            cell.configureCell(userPosts[indexPath.row].image)
         }
         
         return cell
@@ -93,7 +93,7 @@ class ProfileViewController: UICollectionViewController, UICollectionViewDelegat
         
         if !header.isConfiguredOnce {
             if let user = self.userModel {
-                if !user.isCurrentUser {
+                if !user.isCurrentUser { // SO MUCH FLAGS OMG!
                     self.showSpinnerAsync()
                 }
                 

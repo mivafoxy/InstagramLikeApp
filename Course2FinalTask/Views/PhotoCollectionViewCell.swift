@@ -13,7 +13,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI elements
     
-    fileprivate lazy var photoView: UIImageView = {
+    internal lazy var photoView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
@@ -36,7 +36,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func configureCell(_ post: Post) {
-        self.photoView.image = post.image
+    public func configureCell(_ postImage: UIImage) {
+        self.photoView.image = postImage
     }
 }

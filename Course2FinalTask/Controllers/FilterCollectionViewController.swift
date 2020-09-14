@@ -1,20 +1,17 @@
 //
-//  NewPostCollectionViewController.swift
+//  FilterCollectionViewController.swift
 //  Course2FinalTask
 //
-//  Created by Milandr on 12.09.2020.
+//  Created by Milandr on 14.09.2020.
 //  Copyright © 2020 e-Legion. All rights reserved.
 //
 
 import UIKit
-import DataProvider
 
-private let reuseIdentifier = "PhotoCell"
+private let reuseIdentifier = "Cell"
 
-class NewPostCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class FilterCollectionViewController: UICollectionViewController {
 
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -22,50 +19,42 @@ class NewPostCollectionViewController: UICollectionViewController, UICollectionV
         // self.clearsSelectionOnViewWillAppear = false
 
         // Register cell classes
-        self.collectionView!.register(UploadPhotoCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
 
         // Do any additional setup after loading the view.
-        
-        self.navigationItem.title = "New post"
     }
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using [segue destinationViewController].
+        // Pass the selected object to the new view controller.
+    }
+    */
 
     // MARK: UICollectionViewDataSource
 
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 0
+    }
+
+
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return self.loadPhotos().count
+        return 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell =
-            collectionView
-                .dequeueReusableCell(
-                    withReuseIdentifier: reuseIdentifier,
-                    for: indexPath)
-                as! UploadPhotoCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
     
         // Configure the cell
-        cell.configureCell(self.loadPhotos()[indexPath.row])
     
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let screenRect = UIScreen.main.bounds
-        let screenWidth = screenRect.size.width
-        let cellWidth = screenWidth / 3.0
-        let cellSize = CGSize(width: cellWidth, height: cellWidth)
-        
-        return cellSize
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
+
     // MARK: UICollectionViewDelegate
 
     /*
@@ -96,14 +85,5 @@ class NewPostCollectionViewController: UICollectionViewController, UICollectionV
     
     }
     */
-    
-    // MARK: - fileprivate funcs
-    
-    fileprivate func loadPhotos() -> [UIImage] {
-        return DataProviders.shared.photoProvider.photos()
-    }
-    
-    fileprivate func loadThumbnailPhotos() -> [UIImage] {
-        return DataProviders.shared.photoProvider.thumbnailPhotos()
-    }
+
 }

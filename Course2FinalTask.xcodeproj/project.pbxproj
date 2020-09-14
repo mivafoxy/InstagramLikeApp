@@ -20,6 +20,9 @@
 		B38B2DD824F7C96000B7214F /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38B2DD724F7C96000B7214F /* UserTableViewCell.swift */; };
 		B38B2DDC24F7DEA900B7214F /* UserViewCellNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38B2DDB24F7DEA900B7214F /* UserViewCellNavigation.swift */; };
 		B38B2DDF24F7EC7500B7214F /* ProfileHeaderNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38B2DDE24F7EC7500B7214F /* ProfileHeaderNavigation.swift */; };
+		B3B0098D250F954F00A3DF04 /* FilterHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B0098C250F954F00A3DF04 /* FilterHeader.swift */; };
+		B3B0098F250FCFFC00A3DF04 /* FilterCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B0098E250FCFFC00A3DF04 /* FilterCollectionViewController.swift */; };
+		B3B00991250FD01300A3DF04 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B00990250FD01300A3DF04 /* FilterCollectionViewCell.swift */; };
 		B3BCE638250CE71A0078A446 /* SpinnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3BCE637250CE71A0078A446 /* SpinnerViewController.swift */; };
 		B3BCE63E250D185F0078A446 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3BCE63D250D185F0078A446 /* Utils.swift */; };
 		B3CA792B250D317600999D17 /* NewPostCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3CA792A250D317600999D17 /* NewPostCollectionViewController.swift */; };
@@ -28,6 +31,8 @@
 		B3E1AF0824F6E158007A5946 /* ProfileHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E1AF0724F6E158007A5946 /* ProfileHeaderCollectionReusableView.swift */; };
 		B3E1AF0E24F7B020007A5946 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E1AF0D24F7B020007A5946 /* UserModel.swift */; };
 		B3E1AF1124F7BF0E007A5946 /* FeedViewCellNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E1AF1024F7BF0E007A5946 /* FeedViewCellNavigation.swift */; };
+		B3FFC6AA250F688800678FFC /* UploadPhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FFC6A9250F688800678FFC /* UploadPhotoCollectionViewCell.swift */; };
+		B3FFC6AC250F763800678FFC /* UploadPostNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FFC6AB250F763800678FFC /* UploadPostNavigationDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +64,9 @@
 		B38B2DD724F7C96000B7214F /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		B38B2DDB24F7DEA900B7214F /* UserViewCellNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewCellNavigation.swift; sourceTree = "<group>"; };
 		B38B2DDE24F7EC7500B7214F /* ProfileHeaderNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderNavigation.swift; sourceTree = "<group>"; };
+		B3B0098C250F954F00A3DF04 /* FilterHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterHeader.swift; sourceTree = "<group>"; };
+		B3B0098E250FCFFC00A3DF04 /* FilterCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewController.swift; sourceTree = "<group>"; };
+		B3B00990250FD01300A3DF04 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
 		B3BCE637250CE71A0078A446 /* SpinnerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerViewController.swift; sourceTree = "<group>"; };
 		B3BCE63D250D185F0078A446 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		B3CA792A250D317600999D17 /* NewPostCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostCollectionViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +75,8 @@
 		B3E1AF0724F6E158007A5946 /* ProfileHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		B3E1AF0D24F7B020007A5946 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		B3E1AF1024F7BF0E007A5946 /* FeedViewCellNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewCellNavigation.swift; sourceTree = "<group>"; };
+		B3FFC6A9250F688800678FFC /* UploadPhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		B3FFC6AB250F763800678FFC /* UploadPostNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPostNavigationDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +157,7 @@
 				B38B2DD524F7C8D200B7214F /* UsersViewController.swift */,
 				B3BCE637250CE71A0078A446 /* SpinnerViewController.swift */,
 				B3CA792A250D317600999D17 /* NewPostCollectionViewController.swift */,
+				B3B0098E250FCFFC00A3DF04 /* FilterCollectionViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -174,6 +185,9 @@
 				B31E669424F6ACBD00F9EC86 /* PhotoCollectionViewCell.swift */,
 				B3E1AF0724F6E158007A5946 /* ProfileHeaderCollectionReusableView.swift */,
 				B38B2DD724F7C96000B7214F /* UserTableViewCell.swift */,
+				B3FFC6A9250F688800678FFC /* UploadPhotoCollectionViewCell.swift */,
+				B3B0098C250F954F00A3DF04 /* FilterHeader.swift */,
+				B3B00990250FD01300A3DF04 /* FilterCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -193,6 +207,7 @@
 				B38B2DDB24F7DEA900B7214F /* UserViewCellNavigation.swift */,
 				B38B2DDE24F7EC7500B7214F /* ProfileHeaderNavigation.swift */,
 				B3CA792C250EB4C200999D17 /* UIControllerDelegate.swift */,
+				B3FFC6AB250F763800678FFC /* UploadPostNavigationDelegate.swift */,
 			);
 			path = Delegates;
 			sourceTree = "<group>";
@@ -274,14 +289,19 @@
 				B3E1AF0824F6E158007A5946 /* ProfileHeaderCollectionReusableView.swift in Sources */,
 				B3CA792B250D317600999D17 /* NewPostCollectionViewController.swift in Sources */,
 				B31E669324F6A29E00F9EC86 /* ProfileViewController.swift in Sources */,
+				B3B00991250FD01300A3DF04 /* FilterCollectionViewCell.swift in Sources */,
 				B38B2DD824F7C96000B7214F /* UserTableViewCell.swift in Sources */,
 				B3E1AF1124F7BF0E007A5946 /* FeedViewCellNavigation.swift in Sources */,
 				B3E1AF0E24F7B020007A5946 /* UserModel.swift in Sources */,
 				B33F556024F64F960002D568 /* SharedConsts.swift in Sources */,
 				B38B2DDC24F7DEA900B7214F /* UserViewCellNavigation.swift in Sources */,
 				B3BCE63E250D185F0078A446 /* Utils.swift in Sources */,
+				B3FFC6AC250F763800678FFC /* UploadPostNavigationDelegate.swift in Sources */,
+				B3FFC6AA250F688800678FFC /* UploadPhotoCollectionViewCell.swift in Sources */,
+				B3B0098D250F954F00A3DF04 /* FilterHeader.swift in Sources */,
 				74B79258202B3254006BCB41 /* AppDelegate.swift in Sources */,
 				B31E669524F6ACBD00F9EC86 /* PhotoCollectionViewCell.swift in Sources */,
+				B3B0098F250FCFFC00A3DF04 /* FilterCollectionViewController.swift in Sources */,
 				B38B2DD624F7C8D200B7214F /* UsersViewController.swift in Sources */,
 				B383A5D524EAF11300236928 /* FeedViewController.swift in Sources */,
 				B36E7BDC24EC57EB00DDFAFE /* FeedTableViewCell.swift in Sources */,
