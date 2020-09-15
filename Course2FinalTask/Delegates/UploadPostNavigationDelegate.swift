@@ -11,6 +11,6 @@ import UIKit
 
 
 protocol UploadPostNavigationDelegate {
-    func navigateToFilters(with photo: UIImage)
+    func navigateToFilters(with photo: UIImage, and thumb: UIImage)
     func navigateToDescription(with filteredPhoto: UIImage)
 }

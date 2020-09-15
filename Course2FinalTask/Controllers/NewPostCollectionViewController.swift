@@ -45,7 +45,7 @@ class NewPostCollectionViewController: UICollectionViewController, UICollectionV
                 as! UploadPhotoCollectionViewCell
     
         // Configure the cell
-        cell.configureCell(self.loadPhotos()[indexPath.row])
+        cell.configureCell(self.loadPhotos()[indexPath.row], self.loadThumbnailPhotos()[indexPath.row])
         cell.navigationDelegate = self
     
         return cell
@@ -110,7 +110,7 @@ class NewPostCollectionViewController: UICollectionViewController, UICollectionV
 }
 
 extension NewPostCollectionViewController: UploadPostNavigationDelegate {
-    func navigateToFilters(with photo: UIImage) {
+    func navigateToFilters(with photo: UIImage, and thumb: UIImage) {
         let filtersController =
             storyboard?
                 .instantiateViewController(

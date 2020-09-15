@@ -11,6 +11,11 @@ import UIKit
 import DataProvider
 
 class UploadPhotoCollectionViewCell: PhotoCollectionViewCell {
+    
+    // MARK: - store photo thumb for filter screen
+    
+    fileprivate var thumbnailPhoto: UIImage?
+    
     // MARK: - delegates
     
     public var navigationDelegate: UploadPostNavigationDelegate?
@@ -26,7 +31,14 @@ class UploadPhotoCollectionViewCell: PhotoCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Setup ui interactions
+    // MARK: - configuring cell
+    
+    public func configureCell(_ postImage: UIImage, _ thumbnailPhoto: UIImage) {
+        super.configureCell(postImage)
+        self.thumbnailPhoto = thumbnailPhoto
+    }
+    
+    // MARK: - Setup ui interactions
     
     fileprivate func setupInteratcion() {
         
@@ -45,6 +57,11 @@ class UploadPhotoCollectionViewCell: PhotoCollectionViewCell {
     @objc fileprivate func toFilters(_ sender: UITapGestureRecognizer) {
         print("Hello from toFilters!")
         
-        navigationDelegate?.navigateToFilters(with: self.photoView.image!)
+        guard let thumb = self.thumbnailPhoto else {
+            print("WTF?!")
+            return
+        }
+        
+        navigationDelegate?.navigateToFilters(with: self.photoView.image!, and: thumb)
     }
 }

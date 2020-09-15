@@ -13,6 +13,19 @@ private let headerId = "FilterHeader"
 
 class FilterCollectionViewController: UIViewController {
 
+    fileprivate let filters = [
+        "CIPhotoEffectChrome",
+        "CIPhotoEffectFade",
+        "CIPhotoEffectInstant",
+        "CIPhotoEffectNoir",
+        "CIPhotoEffectProcess",
+        "CIPhotoEffectTonal",
+        "CIPhotoEffectTransfer",
+        "CISepiaTone"
+    ]
+    
+    // MARK: - UI elements
+    
     fileprivate lazy var uploadPhotoView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -37,9 +50,25 @@ class FilterCollectionViewController: UIViewController {
         setupUI()
     }
     
+    // MARK: - fileprivate funcs
+    
+    fileprivate func getFilteredThumbPhoto(thumb: UIImage, filterName: String) -> UIImage {
+        let ciContext = CIContext(options: nil)
+        let coreImage = CIImage(image: thumb)
+        let filter = CIFilter(name: filterName)
+        
+        filter!.setDefaults()
+        filter!.setValue(coreImage, forKey: kCIInputImageKey)
+        
+        let filteredImageData = filter!.value(forKey: kCIOutputImageKey) as! CIImage
+        let filteredImageRef = ciContext.createCGImage(filteredImageData, from: filteredImageData.extent)
+        
+        return UIImage(cgImage: filteredImageRef!)
+    }
+    
     // MARK: - setup UI
     
-    func setupUI() {
+    fileprivate func setupUI() {
         view.addSubview(collectionView)
         
         collectionView.backgroundColor = .white
@@ -65,7 +94,7 @@ extension FilterCollectionViewController: UICollectionViewDelegateFlowLayout, UI
         return CGSize(width: 120, height: 125)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return filters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
