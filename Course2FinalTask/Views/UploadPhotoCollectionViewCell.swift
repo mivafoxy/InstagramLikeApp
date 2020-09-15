@@ -45,6 +45,6 @@ class UploadPhotoCollectionViewCell: PhotoCollectionViewCell {
     @objc fileprivate func toFilters(_ sender: UITapGestureRecognizer) {
         print("Hello from toFilters!")
         
-        
+        navigationDelegate?.navigateToFilters(with: self.photoView.image!)
     }
 }

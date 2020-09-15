@@ -30,7 +30,7 @@ class FilterCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        
+        self.setupUI()
     }
     
     required init?(coder: NSCoder) {
@@ -53,14 +53,18 @@ class FilterCollectionViewCell: UICollectionViewCell {
         
         filteredThumbnailView.widthAnchor.constraint(equalToConstant: SharedConsts.UIConsts.largeImageSize).isActive = true
         filteredThumbnailView.heightAnchor.constraint(equalToConstant: SharedConsts.UIConsts.largeImageSize).isActive = true
+        filteredThumbnailView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        filteredThumbnailView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         
         self.addSubview(filterNameLabel)
         
         filterNameLabel
-            .bottomAnchor
+            .topAnchor
             .constraint(
-                equalTo: self.bottomAnchor,
+                equalTo: filteredThumbnailView.bottomAnchor,
                 constant: SharedConsts.UIConsts.smallOffset)
             .isActive = true
+        
+        filterNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
     }
 }

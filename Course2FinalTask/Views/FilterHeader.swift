@@ -17,6 +17,7 @@ class FilterHeader: UICollectionReusableView {
     fileprivate lazy var photoView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -46,5 +47,7 @@ class FilterHeader: UICollectionReusableView {
         
         photoView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         photoView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        photoView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        photoView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
     }
 }

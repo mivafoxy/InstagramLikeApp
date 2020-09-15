@@ -46,6 +46,7 @@ class NewPostCollectionViewController: UICollectionViewController, UICollectionV
     
         // Configure the cell
         cell.configureCell(self.loadPhotos()[indexPath.row])
+        cell.navigationDelegate = self
     
         return cell
     }
@@ -106,4 +107,22 @@ class NewPostCollectionViewController: UICollectionViewController, UICollectionV
     fileprivate func loadThumbnailPhotos() -> [UIImage] {
         return DataProviders.shared.photoProvider.thumbnailPhotos()
     }
+}
+
+extension NewPostCollectionViewController: UploadPostNavigationDelegate {
+    func navigateToFilters(with photo: UIImage) {
+        let filtersController =
+            storyboard?
+                .instantiateViewController(
+                    withIdentifier:
+                        String(describing: FilterCollectionViewController.self)) as! FilterCollectionViewController
+        
+        self.navigationController?.pushViewController(filtersController, animated: true)
+    }
+    
+    func navigateToDescription(with filteredPhoto: UIImage) {
+        print("Can't perform navigation to description!")
+    }
+    
+    
 }
