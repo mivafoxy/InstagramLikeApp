@@ -191,6 +191,21 @@
             </objects>
             <point key="canvasLocation" x="2379" y="948"/>
         </scene>
+        <!--Description View Controller-->
+        <scene sceneID="oaV-0X-t8f">
+            <objects>
+                <viewController storyboardIdentifier="DescriptionViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5Pt-m4-fEE" customClass="DescriptionViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DZk-PD-ocH">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="L7O-tp-yk2"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Ub-4m-57e" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3315" y="948"/>
+        </scene>
         <!--Profile-->
         <scene sceneID="med-cc-h2O">
             <objects>

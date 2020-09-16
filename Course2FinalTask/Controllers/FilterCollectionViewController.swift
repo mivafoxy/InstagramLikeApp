@@ -13,6 +13,11 @@ private let headerId = "FilterHeader"
 
 class FilterCollectionViewController: UIViewController {
 
+    fileprivate lazy var spinnerView: SpinnerViewController = {
+        let spinner = SpinnerViewController()
+        return spinner
+    }()
+    
     fileprivate let filters = [
         "CIPhotoEffectChrome",
         "CIPhotoEffectFade",
@@ -44,6 +49,10 @@ class FilterCollectionViewController: UIViewController {
         return cv
     }()
     
+    // MARK: - public field
+    public var realPhoto: UIImage?
+    public var thumbPhoto: UIImage?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -66,6 +75,23 @@ class FilterCollectionViewController: UIViewController {
         return UIImage(cgImage: filteredImageRef!)
     }
     
+    fileprivate func showSpinnerAsync() {
+        DispatchQueue.main.async {
+            self.addChild(self.spinnerView)
+            self.spinnerView.view.frame = self.view.frame
+            self.view.addSubview(self.spinnerView.view)
+            self.spinnerView.didMove(toParent: self)
+        }
+    }
+    
+    fileprivate func removeSpinnerAsync() {
+        DispatchQueue.main.async {
+            self.spinnerView.willMove(toParent: nil)
+            self.spinnerView.view.removeFromSuperview()
+            self.spinnerView.removeFromParent()
+        }
+    }
+    
     // MARK: - setup UI
     
     fileprivate func setupUI() {
@@ -85,7 +111,10 @@ class FilterCollectionViewController: UIViewController {
         uploadPhotoView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
         uploadPhotoView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         uploadPhotoView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        uploadPhotoView.backgroundColor = .red
+        
+        if let photo = realPhoto {
+            uploadPhotoView.image = photo
+        }
     }
 }
 
@@ -98,9 +127,24 @@ extension FilterCollectionViewController: UICollectionViewDelegateFlowLayout, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! FilterCollectionViewCell
+        let cell =
+            collectionView
+                .dequeueReusableCell(
+                    withReuseIdentifier: reuseIdentifier,
+                    for: indexPath) as! FilterCollectionViewCell
         
-        cell.configureCell()
+        if let thumb = self.thumbPhoto {
+            let filterName = self.filters[indexPath.row]
+            
+            let filteredImage =
+                getFilteredThumbPhoto(
+                    thumb: thumb,
+                    filterName: filterName)
+            
+            cell.configureCell(filteredImage, filterName)
+            cell.navigationDelegate = self
+            cell.filterDelegate = self
+        }
         
         return cell
     }
@@ -110,5 +154,41 @@ extension FilterCollectionViewController: UICollectionViewDelegateFlowLayout, UI
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return SharedConsts.UIConsts.middleOffset
+    }
+}
+
+extension FilterCollectionViewController: UploadPostNavigationDelegate {
+    func navigateToFilters(with photo: UIImage, and thumb: UIImage) {
+        print("can't perform navigation to filters from filters!")
+    }
+    
+    func navigateToDescription(with filteredPhoto: UIImage) {
+        let view =
+            storyboard?
+                .instantiateViewController(
+                    withIdentifier: String(describing: DescriptionViewController.self)) as! DescriptionViewController
+        
+        view.setupMainPhotoView(with: filteredPhoto)
+        
+        self.navigationController?.pushViewController(view, animated: true)
+    }
+}
+
+extension FilterCollectionViewController: FilterDelegate {
+    func imposeFilterAsync(with filterName: String, completion: ((UIImage) -> (Void))?) {
+        self.showSpinnerAsync()
+        
+        let queue = DispatchQueue(label: "view.controller.filter.impose")
+        
+        queue.async {
+            let filteredImage =
+                self.getFilteredThumbPhoto(
+                    thumb: self.realPhoto!,
+                    filterName: filterName)
+            
+            self.removeSpinnerAsync()
+            
+            completion?(filteredImage)
+        }
     }
 }

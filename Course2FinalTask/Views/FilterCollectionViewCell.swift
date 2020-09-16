@@ -10,11 +10,16 @@ import UIKit
 
 class FilterCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - private fields
+    
+    fileprivate var filterName: String?
+    
     // MARK: - UI elements
     
     fileprivate lazy var filteredThumbnailView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
     
@@ -25,12 +30,18 @@ class FilterCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: public delegates
+    
+    public var filterDelegate: FilterDelegate?
+    public var navigationDelegate: UploadPostNavigationDelegate?
+    
     // MARK: - init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         self.setupUI()
+        self.setupInteractions()
     }
     
     required init?(coder: NSCoder) {
@@ -39,11 +50,27 @@ class FilterCollectionViewCell: UICollectionViewCell {
     
     // MARK: - public funcs
     
-    public func configureCell() {
-        filteredThumbnailView.backgroundColor = .orange
+    public func configureCell(_ thumb: UIImage, _ filterName: String) {
         
-        filterNameLabel.text = "Sample text"
+        filteredThumbnailView.image = thumb
+        
+        self.filterName = filterName
+        filterNameLabel.text = filterName.replacingOccurrences(of: "PhotoEffect", with: "")
         filterNameLabel.sizeToFit()
+    }
+    
+    // MARK: - selectors
+    
+    @objc fileprivate func callToFilterImposing(_ sender: UITapGestureRecognizer) {
+        print("going to impose filter on photo!")
+        
+        guard let filter = filterName else { return }
+        
+        filterDelegate?.imposeFilterAsync(with: filter) { (image) in
+            DispatchQueue.main.async {
+                self.navigationDelegate?.navigateToDescription(with: image)
+            }
+        }
     }
     
     // MARK: - ui setup
@@ -66,5 +93,14 @@ class FilterCollectionViewCell: UICollectionViewCell {
             .isActive = true
         
         filterNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+    }
+    
+    fileprivate func setupInteractions() {
+        let tapRecgnizer =
+            UITapGestureRecognizer(
+                target: self,
+                action: #selector(callToFilterImposing(_:)))
+        
+        filteredThumbnailView.addGestureRecognizer(tapRecgnizer)
     }
 }
