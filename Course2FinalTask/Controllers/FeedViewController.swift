@@ -10,6 +10,7 @@ import UIKit
 import DataProvider
 
 class FeedViewController : UITableViewController {
+
     
     fileprivate lazy var spinnerView: SpinnerViewController = {
         let viewController = SpinnerViewController()
@@ -26,6 +27,8 @@ class FeedViewController : UITableViewController {
         self.tableView.register(FeedTableViewCell.self, forCellReuseIdentifier: reuseId)
         self.title = "Feed"
         self.loadFeed()
+        self.setupRefreshControll()
+        
     }
     
     // MARK: - table view data source
@@ -79,7 +82,23 @@ class FeedViewController : UITableViewController {
         feedQueue.async {
             self.feed = posts
             self.removeSpinnerAsync()
+            
+            DispatchQueue.main.async {
+                self.refreshControl?.endRefreshing()
+            }
         }
+    }
+    
+    // MARK: - selectors
+    
+    @objc fileprivate func refreshData(_ sender: Any?) {
+        self.loadFeed()
+    }
+    
+    // MARK: - UI setup
+    fileprivate func setupRefreshControll() {
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl?.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
     }
     
     // MARK: - UIActions
@@ -106,29 +125,37 @@ class FeedViewController : UITableViewController {
 extension FeedViewController: FeedViewCellNavigation {
     
     
-    func performProfileNavigation(with post: Post) {
-        print("hello from controller!")
-        
-        let profileVC =
-            storyboard?.instantiateViewController(
-                withIdentifier: String(describing: ProfileViewController.self)) as! ProfileViewController
-        
-        profileVC.setUserModel(with: post)
-        
-        self.navigationController?.pushViewController(profileVC, animated: true)
+    func performProfileNavigationAsync(with post: Post) {
+        DispatchQueue.main.async {
+            print("hello from controller!")
+            
+            let profileVC =
+                self.storyboard?.instantiateViewController(
+                    withIdentifier: String(describing: ProfileViewController.self)) as! ProfileViewController
+            
+            profileVC.setUserModel(with: post)
+            
+            self.removeSpinnerAsync()
+            
+            self.navigationController?.pushViewController(profileVC, animated: true)
+        }
     }
     
-    func performUsersNavigation(with users: [User], title: String) {
-        print("hello from controller!")
-        
-        let usersVC =
-            storyboard?.instantiateViewController(
-                withIdentifier: String(describing: UsersViewController.self)) as! UsersViewController
-        
-        usersVC.setUsers(with: users)
-        usersVC.customTitle = title
-        
-        self.navigationController?.pushViewController(usersVC, animated: true)
+    func performUsersNavigationAsync(with users: [User], title: String) {
+        DispatchQueue.main.async {
+            print("hello from controller!")
+            
+            let usersVC =
+                self.storyboard?.instantiateViewController(
+                    withIdentifier: String(describing: UsersViewController.self)) as! UsersViewController
+            
+            usersVC.setUsers(with: users)
+            usersVC.customTitle = title
+            
+            self.removeSpinnerAsync()
+            
+            self.navigationController?.pushViewController(usersVC, animated: true)
+        }
     }
 }
 

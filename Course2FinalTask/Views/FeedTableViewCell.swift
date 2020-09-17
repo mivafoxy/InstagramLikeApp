@@ -245,7 +245,7 @@ class FeedTableViewCell: UITableViewCell {
                 return
             }
             
-            navigationDelegate.performProfileNavigation(with: userPost) // Сделать обработку ошибки (возврат обратно на предыдущий экран)
+            navigationDelegate.performProfileNavigationAsync(with: userPost) // Сделать обработку ошибки (возврат обратно на предыдущий экран)
         }
     }
     
@@ -313,7 +313,7 @@ class FeedTableViewCell: UITableViewCell {
             .usersLikedPost(with: currentPost.id, queue: feedCellQueue) { (loadedUsers) in
                 if let currentUsers = loadedUsers {
                     self.profileNavigationDelegate?
-                        .performUsersNavigation(
+                        .performUsersNavigationAsync(
                             with: currentUsers,
                             title: "Likes")
                 } else {

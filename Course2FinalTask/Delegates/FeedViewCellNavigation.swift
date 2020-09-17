@@ -10,7 +10,7 @@ import Foundation
 import DataProvider
 
 protocol FeedViewCellNavigation {
-    func performProfileNavigation(with post: Post)
-    func performUsersNavigation(with users: [User], title: String)
+    func performProfileNavigationAsync(with post: Post)
+    func performUsersNavigationAsync(with users: [User], title: String)
     func showLoadSpinnerAsync()
 }

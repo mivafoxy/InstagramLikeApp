@@ -83,14 +83,19 @@ class DescriptionViewController: UIViewController {
                     if let _ = post {
                         // TODO: go to root of navigation stack
                         print("Upload success!")
+                        self.returnToRootAsync()
                     } else {
                         print("Upload error!")
                         // TODO: Show alert - go to root of navigation stack
+                        Utils.showAlertAsync(
+                            on: self,
+                            title: SharedConsts.TextConsts.errorTitle,
+                            message: SharedConsts.TextConsts.errorSmthWrong,
+                            completion: { (action) in self.sharePost(sender) },
+                            discard: { (action) in self.returnToRootAsync() })
                     }
                     
-                    DispatchQueue.main.async {
-                        self.navigationController?.popToRootViewController(animated: true)
-                    }
+                    
         }
     }
     
@@ -135,6 +140,12 @@ class DescriptionViewController: UIViewController {
             self.spinnerView.willMove(toParent: nil)
             self.spinnerView.view.removeFromSuperview()
             self.spinnerView.removeFromParent()
+        }
+    }
+    
+    fileprivate func returnToRootAsync() {
+        DispatchQueue.main.async {
+            self.navigationController?.popToRootViewController(animated: true)
         }
     }
 }
