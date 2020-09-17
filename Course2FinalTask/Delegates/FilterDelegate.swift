@@ -10,5 +10,5 @@ import Foundation
 import UIKit
 
 protocol FilterDelegate {
-    func imposeFilterAsync(with filterName: String, completion: ((UIImage) -> (Void))?)
+    func imposeFilterAsync(with filterName: String)
 }

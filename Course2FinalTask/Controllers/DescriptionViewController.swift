@@ -7,10 +7,16 @@
 //
 
 import UIKit
+import DataProvider
 
 class DescriptionViewController: UIViewController {
 
     // MARK: - ui elements
+    
+    fileprivate lazy var spinnerView: SpinnerViewController = {
+        let spinner = SpinnerViewController()
+        return spinner
+    }()
     
     fileprivate lazy var filteredPhotoView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
@@ -56,6 +62,38 @@ class DescriptionViewController: UIViewController {
         filteredPhotoView.image = photo
     }
     
+    // MARK: - selectors
+    
+    @objc fileprivate func sharePost(_ sender: Any?) {
+        
+        let newPostImage = filteredPhotoView.image!
+        let description = descriptionTextField.text ?? ""
+        
+        let queue = DispatchQueue(label: "controller.description.share.post")
+        
+        self.showSpinnerAsync()
+        
+        DataProviders
+            .shared
+            .postsDataProvider
+            .newPost(
+                with: newPostImage,
+                description: description,
+                queue: queue) { (post) in
+                    if let _ = post {
+                        // TODO: go to root of navigation stack
+                        print("Upload success!")
+                    } else {
+                        print("Upload error!")
+                        // TODO: Show alert - go to root of navigation stack
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+        }
+    }
+    
     // MARK: - setup ui
     
     fileprivate func setupUI() {
@@ -77,6 +115,26 @@ class DescriptionViewController: UIViewController {
         descriptionTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -1*SharedConsts.UIConsts.middleOffset).isActive = true
         descriptionTextField.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: SharedConsts.UIConsts.smallOffset).isActive = true
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Share", style: .plain, target: nil, action: nil)
+        navigationItem.rightBarButtonItem =
+            UIBarButtonItem(title: "Share", style: .plain, target: self, action: #selector(sharePost(_:)))
+    }
+    
+    // MARK: - UIActions
+    
+    fileprivate func showSpinnerAsync() {
+        DispatchQueue.main.async {
+            self.addChild(self.spinnerView)
+            self.spinnerView.view.frame = self.view.frame
+            self.view.addSubview(self.spinnerView.view)
+            self.spinnerView.didMove(toParent: self)
+        }
+    }
+    
+    fileprivate func removeSpinnerAsync() {
+        DispatchQueue.main.async {
+            self.spinnerView.willMove(toParent: nil)
+            self.spinnerView.view.removeFromSuperview()
+            self.spinnerView.removeFromParent()
+        }
     }
 }

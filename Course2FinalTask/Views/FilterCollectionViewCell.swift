@@ -66,11 +66,7 @@ class FilterCollectionViewCell: UICollectionViewCell {
         
         guard let filter = filterName else { return }
         
-        filterDelegate?.imposeFilterAsync(with: filter) { (image) in
-            DispatchQueue.main.async {
-                self.navigationDelegate?.navigateToDescription(with: image)
-            }
-        }
+        filterDelegate?.imposeFilterAsync(with: filter)
     }
     
     // MARK: - ui setup

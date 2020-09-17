@@ -92,6 +92,14 @@ class FilterCollectionViewController: UIViewController {
         }
     }
     
+    // MARK: - selectors
+    
+    @objc fileprivate func goToDescriptionView(_ sender: Any?) {
+        guard let filterdPhoto = realPhoto else { return }
+        
+        self.navigateToDescription(with: filterdPhoto)
+    }
+    
     // MARK: - setup UI
     
     fileprivate func setupUI() {
@@ -115,6 +123,13 @@ class FilterCollectionViewController: UIViewController {
         if let photo = realPhoto {
             uploadPhotoView.image = photo
         }
+        
+        navigationItem.rightBarButtonItem =
+            UIBarButtonItem(
+                title: "Next",
+                style: .plain,
+                target: self,
+                action: #selector(goToDescriptionView(_:)))
     }
 }
 
@@ -175,7 +190,7 @@ extension FilterCollectionViewController: UploadPostNavigationDelegate {
 }
 
 extension FilterCollectionViewController: FilterDelegate {
-    func imposeFilterAsync(with filterName: String, completion: ((UIImage) -> (Void))?) {
+    func imposeFilterAsync(with filterName: String) {
         self.showSpinnerAsync()
         
         let queue = DispatchQueue(label: "view.controller.filter.impose")
@@ -186,9 +201,13 @@ extension FilterCollectionViewController: FilterDelegate {
                     thumb: self.realPhoto!,
                     filterName: filterName)
             
-            self.removeSpinnerAsync()
+            self.realPhoto = filteredImage
             
-            completion?(filteredImage)
+            DispatchQueue.main.async {
+                self.uploadPhotoView.image = self.realPhoto
+            }
+            
+            self.removeSpinnerAsync()
         }
     }
 }
